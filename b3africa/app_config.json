@@ -1,0 +1,22 @@
+{
+    "default":{
+        "host":"localhost",
+        "user":"root",
+        "passwd":"admin",
+        "db":"adgg_v2",
+        "port":"3306"
+    },
+    "mapped":{
+        "host":"localhost",
+        "user":"root",
+        "passwd":"admin",
+        "db":"axgg",
+        "port":"3306"
+    },
+    "onadata":{
+        "host":"http://data.ilri.org/collect/",
+        "user":"adggtnz",
+        "passwd":"adgg",
+        "api_token":"d5a4224c784e7e0e0bf4d888de851910ca495102"
+    }
+}

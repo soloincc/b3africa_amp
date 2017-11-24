@@ -1,0 +1,11 @@
+{
+  "makefolders":[
+    "var/lib/mysql"
+  ],
+  "copyfiles":[
+    {
+      "source":".",
+      "destination":"azizi_amp"
+    }
+  ]
+}
