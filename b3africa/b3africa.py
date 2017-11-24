@@ -1,22 +1,14 @@
-import requests, re, os, collections
-import logging, traceback, json
-import copy
-import subprocess
-import hashlib
-import dateutil.parser
-import math
+import os
+import sys
+import logging
 
-from ConfigParser import ConfigParser
-from datetime import datetime
-from collections import defaultdict, OrderedDict
+from collections import defaultdict
 
-from django.conf import settings
-from django.forms.models import model_to_dict
-from django.db import connection, connections, transaction, IntegrityError
-from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpRequest
+from django.db import connection, connections
+from django.http import HttpRequest
 from raven import Client
 
+# Now import the core parser modules
 from terminal_output import Terminal
 from excel_writer import ExcelWriter
 from models import ODKForm, RawSubmissions, FormViews, ViewsData, ViewTablesLookup, DictionaryItems, FormMappings, ProcessingErrors, ODKFormGroup
