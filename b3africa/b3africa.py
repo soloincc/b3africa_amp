@@ -49,7 +49,7 @@ logger.setLevel(logging.DEBUG)
 request = HttpRequest()
 
 
-class ADGG():
+class AziziAMP():
     def __init__(self):
         return
 
