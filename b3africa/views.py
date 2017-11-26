@@ -70,11 +70,6 @@ def under_review_page(request):
     return render(request, 'under_review.html')
 
 
-def landing_page(request):
-    get_or_create_csrf_token(request)
-    return render(request, 'azizi_amp.html')
-
-
 # @login_required(login_url='/login')
 def download_page(request):
     csrf_token = get_or_create_csrf_token(request)
@@ -136,16 +131,12 @@ def update_db(request):
 
 def show_landing(request):
     csrf_token = get_or_create_csrf_token(request)
-
-    azizi_amp = AziziAMP()
-    stats = azizi_amp.landing_page_stats()
     page_settings = {
         'page_title': "%s | Home" % settings.SITE_NAME,
         'csrf_token': csrf_token,
-        'section_title': 'AziziAMP Home',
-        'data': stats
+        'section_title': ''
     }
-    return render(request, 'landing_page.html', page_settings)
+    return render(request, 'azizi_amp.html', page_settings)
 
 
 @login_required(login_url='/login')

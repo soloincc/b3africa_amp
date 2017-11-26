@@ -3,7 +3,7 @@
 <!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
 <!--[if !IE]><!--> <html lang="en"> <!--<![endif]-->
 <head>
-	<title>Azizi AMP</title>
+	<title>About Us 3 | Unify - Responsive Website Template</title>
 
 	<!-- Meta -->
 	<meta charset="utf-8">
@@ -15,207 +15,237 @@
 	<link rel="shortcut icon" href="favicon.ico">
 
 	<!-- Web Fonts -->
-	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin">
+	<link rel='stylesheet' type='text/css' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,600&amp;subset=cyrillic,latin'>
 
 	<!-- CSS Global Compulsory -->
 	<link rel="stylesheet" href="{{ static('unify-assets/plugins/bootstrap/css/bootstrap.min.css') }}">
-	<link rel="stylesheet" href="{{ static('unify-assets/css/one.style.css') }}">
-	
+	<link rel="stylesheet" href="{{ static('unify-assets/css/style.css') }}">
+
 	<!-- CSS Header and Footer -->
-	<link rel="stylesheet" href="{{ static('unify-assets/css/footers/footer-v6.css') }}">
-	<link rel="stylesheet" href="{{ static('unify-assets/css/footers/footer-v1.css') }}">
+	<link rel="stylesheet" href="{{ static('unify-assets/css/header-default.css') }}">
+	<link rel="stylesheet" href="{{ static('unify-assets/css/footer-v1.css') }}">
 
 	<!-- CSS Implementing Plugins -->
 	<link rel="stylesheet" href="{{ static('unify-assets/plugins/animate.css') }}">
 	<link rel="stylesheet" href="{{ static('unify-assets/plugins/line-icons/line-icons.css') }}">
 	<link rel="stylesheet" href="{{ static('unify-assets/plugins/font-awesome/css/font-awesome.min.css') }}">
+	<link rel="stylesheet" href="{{ static('unify-assets/plugins/owl-carousel/owl-carousel/owl.carousel.css') }}">
 
 	<!-- CSS Theme -->
 	<link rel="stylesheet" href="{{ static('unify-assets/css/theme-colors/default.css') }}" id="style_color">
-	<link rel="stylesheet" href="{{ static('unify-assets/css/theme-skins/dark.css') }}">
+	<link rel="stylesheet" href="{{ static('unify-assets/css/dark.css') }}">
 
 	<!-- CSS Customization -->
 	<link rel="stylesheet" href="{{ static('unify-assets/css/custom.css') }}">
+	<link rel="stylesheet" href="{{ static('css/azizi_amp.css') }}">
 </head>
 
-<body class="header-fixed">
+<body>
 	<div class="wrapper">
-		<!--=== Header v6 ===-->
-		<div class="header-v6 header-white-transparent header-sticky">
-			<!-- Navbar -->
-			<div class="navbar mega-menu" role="navigation">
-				<div class="container">
-					<!-- Brand and toggle get grouped for better mobile display -->
-					<div class="menu-container">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-							<span class="sr-only">Toggle navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-
-						<!-- Navbar Brand -->
-						<div class="navbar-brand">
-							<a href="index.html">
-								<img class="default-logo" src="assets/img/logo3-light.png" alt="Logo">
-								<img class="shrink-logo" src="assets/img/logo3-dark.png" alt="Logo">
-							</a>
-						</div>
-						<!-- ENd Navbar Brand -->
-
-						<!-- Header Inner Right -->
-						<div class="header-inner-right">
-							<ul class="menu-icons-list">
-								<li class="menu-icons shopping-cart">
-									<i class="menu-icons-style radius-x fa fa-shopping-cart"></i>
-									<span class="badge">0</span>
-									<div class="shopping-cart-open">
-										<span class="shc-title">No products in the Cart</span>
-										<button type="button" class="btn-u"><i class="fa fa-shopping-cart"></i> Cart</button>
-										<span class="shc-total">Total: <strong>$0.00</strong></span>
-									</div>
-								</li>
-								<li class="menu-icons">
-									<i class="menu-icons-style search search-close search-btn fa fa-search"></i>
-									<div class="search-open">
-										<input type="text" class="animated fadeIn form-control" placeholder="Start searching ...">
-									</div>
-								</li>
-							</ul>
-						</div>
-						<!-- End Header Inner Right -->
-					</div>
-
-					<!-- Collect the nav links, forms, and other content for toggling -->
-					<div class="collapse navbar-collapse navbar-responsive-collapse">
-						<div class="menu-container">
-							<ul class="nav navbar-nav">
-								<li class="page-scroll home">
-									<a href="#intro">Home</a>
-								</li>
-								<li class="page-scroll">
-									<a href="#about">About Us</a>
-								</li>
-								<li class="page-scroll">
-									<a href="#vision">Vision</a>
-								</li>
-								<li class="page-scroll">
-									<a href="#team">Our Team</a>
-								</li>
-								<li class="page-scroll">
-									<a href="#contact">Contact</a>
-								</li>
-							</ul>
-						</div>
-					</div><!--/navbar-collapse-->
-				</div>
-			</div>
-			<!-- End Navbar -->
-		</div>
-		<!--=== End Header v6 ===-->
-
-		<!-- Interactive Slider v2 -->
-		<div class="interactive-slider-v2 img-v1">
+		<!--=== Header ===-->
+		<div class="header">
 			<div class="container">
-				<h1>Welcome to Unify</h1>
-				<p>Clean and fully responsive Template.</p>
-			</div>
-		</div>
-		<!-- End Interactive Slider v2 -->
+				<!-- Logo -->
+				<a class="logo azizi_logo">
+					<img src="{{ static('img/azizi_logo.jpg') }}" alt="Logo">
+				</a>
+				<!-- End Logo -->
 
-		<!--=== Content ===-->
-		<div class="container content-md">
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ornare magna neque, quis sodales ex luctus at. In feugiat finibus sem. Ut nisi est, cursus vitae risus non, sagittis auctor nisl. Aenean sit amet luctus ante. Phasellus pellentesque tempor libero nec rhoncus. Nam sed diam eget ante rhoncus volutpat vitae ac dui. Vestibulum massa velit, pretium pellentesque vestibulum et, pharetra at magna. Praesent sit amet arcu malesuada, malesuada dui et, fringilla neque. Integer sapien elit, gravida in malesuada consectetur, sagittis ac erat. Praesent vel vestibulum eros, ac interdum diam. Cras vitae massa neque. Duis dapibus auctor dui, eu pulvinar odio efficitur non. Sed quis nibh in risus gravida hendrerit.</p>
+				<!-- Toggle get grouped for better mobile display -->
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="fa fa-bars"></span>
+				</button>
+				<!-- End Toggle -->
+			</div><!--/end container-->
 
-			<p>In volutpat tristique rutrum. Vestibulum sollicitudin at nulla sit amet pulvinar. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam dictum at diam eu commodo. Mauris vehicula sapien lectus, ac molestie mauris commodo sit amet. Aliquam non est leo. Mauris sagittis sagittis urna, in lacinia lectus efficitur in. Proin sollicitudin mattis sodales. Cras et faucibus neque, non ornare metus. Vestibulum id semper est. Maecenas vestibulum varius sapien, id elementum tellus euismod at. Vestibulum auctor ante a efficitur sagittis. Proin tempus lacus risus, quis dapibus nunc eleifend sit amet.</p>
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse mega-menu navbar-responsive-collapse">
+				<div class="container">
+					<ul class="nav navbar-nav">
+						<!-- Home -->
+						<li>
+							<a href="javascript:void(0);">
+								Home
+							</a>
+						</li>
+						<!-- End Home -->
 
-			<p>Aliquam quis varius nisl. Praesent egestas magna efficitur enim posuere rutrum. Vivamus nulla velit, tempus id tempus nec, lacinia et leo. Nullam fringilla commodo facilisis. Maecenas mi eros, feugiat eget arcu sit amet, posuere efficitur ex. Nulla vel felis facilisis turpis porta euismod. Aenean vel enim nec nisl varius feugiat vitae nec urna. Duis feugiat molestie ex, non tincidunt tortor finibus in. Pellentesque quis ultricies augue. Nulla et lacus semper quam ornare cursus sit amet a sem. Vivamus semper lectus dui, faucibus dignissim enim feugiat vitae. Morbi fermentum odio neque, a molestie nunc volutpat ac. In ut aliquam est. Pellentesque est elit, pulvinar a magna sit amet, vestibulum fermentum neque. Aliquam vel lorem ut tortor tristique pretium eget vitae dolor.</p>
+						<!-- Dashboard -->
+						<li>
+							<a href="/dashboard">
+								Dashboard
+							</a>
+						</li>
+						<!-- End Dashboard -->
 
-			<p>Vestibulum dictum nec libero ut euismod. Fusce posuere sit amet libero vitae ornare. Curabitur posuere semper ipsum in efficitur. Etiam pellentesque felis sodales, blandit eros vel, dignissim turpis. Phasellus ullamcorper rhoncus enim, a consequat libero sagittis at. Mauris in pharetra elit. Suspendisse in urna dictum, tincidunt odio eget, vehicula turpis. Sed eget quam consequat, aliquam magna non, aliquam ipsum.</p>
-		</div>
-		<!--=== End Content ===-->
+						<!-- Features -->
+						<li>
+							<a href="javascript:void(0);">
+								Features
+							</a>
+						</li>
+						<!-- End Features -->
 
-		<!--=== Footer v7 ===-->
-		<section id="footer-v7" class="contacts-section">
-			<div class="container content-lg">
-				<div class="row contacts-in">
-					<div class="col-md-6 md-margin-bottom-40">
-						<ul class="list-unstyled">
-							<li><i class="fa fa-home"></i> 5B Streat, City 50987 New Town US</li>
-							<li><i class="fa fa-phone"></i> 1(800) 220 084</li>
-							<li><i class="fa fa-envelope"></i> <a href="info@example.com">info@example.com</a></li>
-							<li><i class="fa fa-globe"></i> <a href="http://htmlstream.com">www.htmlstream.com</a></li>
-						</ul>
-					</div>
+						<!-- Documentation -->
+						<li>
+							<a href="javascript:void(0);">
+								Documentation
+							</a>
+						</li>
+						<!-- End Documentation -->
 
-					<div class="col-md-6">
-						<form action="assets/php/sky-forms-pro/demo-contacts-process.php" method="post" id="sky-form3" class="sky-form">
-							<fieldset>
-								<label>Name</label>
-								<div class="row">
-									<div class="col-md-7 margin-bottom-20 col-md-offset-0">
-										<div>
-											<input type="text" name="name" id="name" class="form-control">
-										</div>
-									</div>
+						<!-- Search Block -->
+						<li>
+							<i class="search fa fa-search search-btn"></i>
+							<div class="search-open">
+								<div class="input-group animated fadeInDown">
+									<input type="text" class="form-control" placeholder="Search">
+									<span class="input-group-btn">
+										<button class="btn-u" type="button">Go</button>
+									</span>
 								</div>
-
-								<label>Email <span class="color-red">*</span></label>
-								<div class="row">
-									<div class="col-md-7 margin-bottom-20 col-md-offset-0">
-										<div>
-											<input type="text" name="email" id="email" class="form-control">
-										</div>
-									</div>
-								</div>
-
-								<label>Message</label>
-								<div class="row">
-									<div class="col-md-11 margin-bottom-20 col-md-offset-0">
-										<div>
-											<textarea rows="8" name="message" id="message" class="form-control"></textarea>
-										</div>
-									</div>
-								</div>
-
-								<p><button type="submit" class="btn-u btn-brd btn-brd-hover btn-u-dark">Send Message</button></p>
-							</fieldset>
-
-							<div class="message">
-								<i class="rounded-x fa fa-check"></i>
-								<p>Your message was successfully sent!</p>
 							</div>
-						</form>
+						</li>
+						<!-- End Search Block -->
+					</ul>
+				</div><!--/end container-->
+			</div><!--/navbar-collapse-->
+		</div>
+		<!--=== End Header ===-->
+
+		<!--=== Content Part ===-->
+		<div class="container content">
+			<div class="row margin-bottom-40">
+				<div class="col-md-6 md-margin-bottom-40">
+					<p>The Azizi Anarchy Management Platform (Azizi AMP) is an incredibly powerful platform for downstream analysis and management of data collected with the versatile Open Data Kit (ODK) suite of tools. Azizi AMP has been developed purposefuly for the BiBBOX which is being developed by the B3Africa consortium.</p>
+					<p>Azizi AMP provides users the opportunity to:</p>
+					<ul class="list-unstyled">
+						<li><i class="fa fa-check color-green"></i> Deploy mobile data collection tools with minimal IT support</li>
+						<li><i class="fa fa-check color-green"></i> Manage collected data easily</li>
+						<li><i class="fa fa-check color-green"></i> Extract the data to different formats</li>
+						<li><i class="fa fa-check color-green"></i> Integrate with other 3rd party applications eg. Baobab LIMS</li>
+						<li><i class="fa fa-check color-green"></i> Reduce the TAT from data collection to analysis</li>
+					</ul><br />
+
+					<!-- Blockquotes -->
+					<blockquote class="hero-unify">
+						<p>Azizi AMP is an essential tool for users in resource poor environment to employ cutting edge data collection and management practices without the heavy investments required in classic deployments</p>
+						<small>Prof. Steve Kemp</small>
+					</blockquote>
+				</div>
+
+				<div class="col-md-6 md-margin-bottom-40">
+					<div class="responsive-video">
+						<iframe src="http://player.vimeo.com/video/9679622" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
 					</div>
 				</div>
-			</div>
-		</section>
-		<!--=== End Footer v7 ===-->
+			</div><!--/row-->
+
+			<!-- Meer Our Team -->
+			<div class="headline"><h2>Meet Our Team</h2></div>
+			<div class="row team">
+				<div class="col-sm-3">
+					<div class="thumbnail-style">
+						<img class="img-responsive" src="{{ static('unify-assets/img/team/img39-md.jpg') }}" alt="" />
+						<h3><a>Prof. Steve Kemp</a> <small>Project Manager</small></h3>
+						<p>Steve Kemp is the overall leader of the project and is in charge of conceptualization of features and requirements.</p>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="thumbnail-style">
+						<img class="img-responsive" src="{{ static('unify-assets/img/team/img20-md.jpg') }}" alt="" />
+						<h3><a>Wangoru Kihara</a> <small>Lead Developer</small></h3>
+						<p>Wangoru Kihara is the lead developer of Azizi AMP. He has extensive experience in design and development of web and data collection systems.</p>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="thumbnail-style">
+						<img class="img-responsive" src="{{ static('unify-assets/img/team/img19-md.jpg') }}" alt="" />
+						<h3><a>Samuel Munyao</a> <small>Biorepository Manager</small></h3>
+						<p>Samuel is the Biorepositiry manager at ILRI where the Azizi AMP was developed</p>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="thumbnail-style">
+						<img class="img-responsive" src="{{ static('unify-assets/img/team/img35-md.jpg') }}" alt="" />
+						<h3><a>Mwangi Kamau</a> <small>Systems Tester</small></h3>
+						<p>Mwangi leads the Azizi biorepository team in testing the data collection system</p>
+					</div>
+				</div>
+			</div><!--/team-->
+			<!-- End Meer Our Team -->
+		</div><!--/container-->
+		<!--=== End Content Part ===-->
+
+		<!--=== Footer Version 1 ===-->
+		<div class="footer-v1">
+			<div class="copyright">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6">
+							<p>
+								Developed in Collaboration with
+								<a href="https://badili.co.ke">Badili Innovations</a>
+							</p>
+						</div>
+
+						<!-- Social Links -->
+						<div class="col-md-6">
+							<ul class="footer-socials list-inline">
+								<li>
+									<a href="#" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook">
+										<i class="fa fa-facebook"></i>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Skype">
+										<i class="fa fa-skype"></i>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Linkedin">
+										<i class="fa fa-linkedin"></i>
+									</a>
+								</li>
+								<li>
+									<a href="#" class="tooltips" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter">
+										<i class="fa fa-twitter"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<!-- End Social Links -->
+					</div>
+				</div>
+			</div><!--/copyright-->
+		</div>
+		<!--=== End Footer Version 1 ===-->
 	</div><!--/wrapper-->
 
 	<!-- JS Global Compulsory -->
-	<script type="text/javascript" src="assets/plugins/jquery/jquery.min.js"></script>
-	<script type="text/javascript" src="assets/plugins/jquery/jquery-migrate.min.js"></script>
-	<script type="text/javascript" src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="{{ static('unify-assets/plugins/jquery/jquery.min.js') }}"></script>
+	<script type="text/javascript" src="{{ static('unify-assets/plugins/jquery/jquery-migrate.min.js') }}"></script>
+	<script type="text/javascript" src="{{ static('unify-assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
 	<!-- JS Implementing Plugins -->
-	<script type="text/javascript" src="assets/plugins/back-to-top.js"></script>
-	<script type="text/javascript" src="assets/plugins/smoothScroll.js"></script>
-	<script type="text/javascript" src="assets/plugins/jquery.parallax.js"></script>
+	<script type="text/javascript" src="{{ static('unify-assets/plugins/back-to-top.js') }}"></script>
+	<script type="text/javascript" src="{{ static('unify-assets/plugins/smoothScroll.js') }}"></script>
+	<script type="text/javascript" src="{{ static('unify-assets/plugins/owl-carousel/owl-carousel/owl.carousel.js') }}"></script>
 	<!-- JS Customization -->
-	<script type="text/javascript" src="assets/js/custom.js"></script>
+	<script type="text/javascript" src="{{ static('unify-assets/js/custom.js') }}"></script>
 	<!-- JS Page Level -->
-	<script type="text/javascript" src="assets/js/app.js"></script>
-	<script type="text/javascript" src="assets/js/plugins/style-switcher.js"></script>
+	<script type="text/javascript" src="{{ static('unify-assets/js/app.js') }}"></script>
+	<script type="text/javascript" src="{{ static('unify-assets/js/plugins/owl-carousel.js') }}"></script>
+	<script type="text/javascript" src="{{ static('unify-assets/js/plugins/style-switcher.js') }}"></script>
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
 			App.init();
-			StyleSwitcher.initStyleSwitcher();
 		});
 	</script>
 <!--[if lt IE 9]>
-	<script src="assets/plugins/respond.js"></script>
-	<script src="assets/plugins/html5shiv.js"></script>
-	<script src="assets/plugins/placeholder-IE-fixes.js"></script>
+	<script src="{{ static('unify-assets/plugins/respond.js') }}"></script>
+	<script src="{{ static('unify-assets/plugins/html5shiv.js') }}"></script>
+	<script src="{{ static('unify-assets/plugins/placeholder-IE-fixes.js') }}"></script>
 	<![endif]-->
 
 </body>
