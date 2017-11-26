@@ -16,7 +16,7 @@ import json
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 if 'MYSQL_DATABASE' in os.environ:
     STATICFILES_DIRS = (
-        os.path.join(SITE_ROOT, 'opt/azizi_amp/static/'),
+        os.path.join(SITE_ROOT, '/opt/azizi_amp/static/'),
     )
 else:
     static_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../static'))
@@ -94,7 +94,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'b3africa.wsgi.application'
 
-SITE_NAME = 'In field data collection app'
+SITE_NAME = 'Azizi - AMP'
 
 DEFAULT_REPORTING_PERIOD = 30
 
