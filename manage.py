@@ -6,7 +6,7 @@ if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "b3africa.settings")
 
     # in order to include modules from the core parser, we need to add it as a path in our system
-    parser_core_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../vendor'))
+    parser_core_path = os.path.abspath(os.path.join(os.path.dirname(__file__), './vendor'))
     if parser_core_path not in sys.path:
         sys.path.append(parser_core_path)
 

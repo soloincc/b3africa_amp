@@ -19,8 +19,9 @@ if 'MYSQL_DATABASE' in os.environ:
         os.path.join(SITE_ROOT, 'opt/azizi_amp/static/'),
     )
 else:
+    static_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../static'))
     STATICFILES_DIRS = (
-        os.path.join(SITE_ROOT, '/www/adgg_v2/static/'),
+        os.path.join(SITE_ROOT, static_path),
     )
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -52,7 +53,8 @@ INSTALLED_APPS = [
     'livereload',
     'raven.contrib.django.raven_compat',
 
-    'adgg_tz'
+    # 'odk_parser',
+    'b3africa'
 ]
 
 MIDDLEWARE = [
@@ -66,14 +68,14 @@ MIDDLEWARE = [
     # 'livereload.middleware.LiveReloadScript',
 ]
 
-ROOT_URLCONF = 'adgg_tz.urls'
+ROOT_URLCONF = 'b3africa.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'DIRS': [os.path.join(BASE_DIR, 'templates/jinja2')],
         'APP_DIRS': True,
-        'OPTIONS': {'environment': 'adgg_tz.jinja2_settings.environment',},
+        'OPTIONS': {'environment': 'b3africa.jinja2_settings.environment',},
     },
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -90,9 +92,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'adgg_tz.wsgi.application'
+WSGI_APPLICATION = 'b3africa.wsgi.application'
 
-SITE_NAME = 'ADGG v2'
+SITE_NAME = 'In field data collection app'
 
 DEFAULT_REPORTING_PERIOD = 30
 
@@ -129,7 +131,7 @@ if 'MYSQL_DATABASE' in os.environ:
         'API_TOKEN': os.environ['ONA_API_TOKEN']
     }
 else:
-    with open('adgg_tz/app_config.json') as config_file:
+    with open('b3africa/app_config.json') as config_file:
         configs = json.load(config_file)
         DATABASES = {
             'default': {
