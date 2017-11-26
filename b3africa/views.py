@@ -20,9 +20,9 @@ from django.middleware import csrf
 
 from wsgiref.util import FileWrapper
 
-from .odk_forms import OdkForms
-from .adgg import ADGG
-from .terminal_output import Terminal
+from vendor.odk_parser import OdkParser
+from .b3africa import AziziAMP
+from vendor.terminal_output import Terminal
 
 import os
 terminal = Terminal()
@@ -81,7 +81,7 @@ def download_page(request):
     csrf_token = get_or_create_csrf_token(request)
 
     # get all the data to be used to construct the tree
-    odk = OdkForms()
+    odk = OdkParser()
     all_forms = odk.get_all_forms()
     page_settings = {
         'page_title': "%s | Downloads" % settings.SITE_NAME,
@@ -95,7 +95,7 @@ def download_page(request):
 # @login_required(login_url='/login')
 def modify_view(request):
 
-    odk = OdkForms()
+    odk = OdkParser()
     if (request.get_full_path() == '/edit_view/'):
         response = odk.edit_view(request)
     elif (request.get_full_path() == '/delete_view/'):
@@ -109,7 +109,7 @@ def manage_views(request):
     csrf_token = get_or_create_csrf_token(request)
 
     # get all the data to be used to construct the tree
-    odk = OdkForms()
+    odk = OdkParser()
     all_data = odk.get_views_info()
 
     page_settings = {
@@ -123,7 +123,7 @@ def manage_views(request):
 
 # @login_required(login_url='/login')
 def update_db(request):
-    odk = OdkForms()
+    odk = OdkParser()
 
     try:
         odk.update_sdss_db()
@@ -138,12 +138,12 @@ def update_db(request):
 def show_landing(request):
     csrf_token = get_or_create_csrf_token(request)
 
-    adgg = ADGG()
-    stats = adgg.landing_page_stats()
+    azizi_amp = AziziAMP()
+    stats = azizi_amp.landing_page_stats()
     page_settings = {
         'page_title': "%s | Home" % settings.SITE_NAME,
         'csrf_token': csrf_token,
-        'section_title': 'ADGG Home',
+        'section_title': 'AziziAMP Home',
         'data': stats
     }
     return render(request, 'landing_page.html', page_settings)
@@ -153,13 +153,13 @@ def show_landing(request):
 def show_dashboard(request):
     csrf_token = get_or_create_csrf_token(request)
 
-    adgg = ADGG()
+    azizi_amp = AziziAMP()
     try:
-        stats = adgg.system_stats()
+        stats = azizi_amp.system_stats()
         page_settings = {
             'page_title': "%s | Home" % settings.SITE_NAME,
             'csrf_token': csrf_token,
-            'section_title': 'ADGG Overview',
+            'section_title': 'AziziAMP Overview',
             'data': stats,
             'js_data': json.dumps(stats)
         }
@@ -172,7 +172,7 @@ def show_dashboard(request):
 # @login_required(login_url='/login')
 def form_structure(request):
     # given a form id, get the structure for the form
-    odk = OdkForms()
+    odk = OdkParser()
     try:
         form_id = int(request.POST['form_id'])
         structure = odk.get_form_structure_as_json(form_id)
@@ -190,7 +190,7 @@ def form_structure(request):
 # @login_required(login_url='/login')
 def download_data(request):
     # given the nodes, download the associated data
-    odk = OdkForms()
+    odk = OdkParser()
     try:
         data = json.loads(request.body)
         res = odk.fetch_merge_data(data['form_id'], data['nodes[]'], data['format'], data['action'], data['view_name'])
@@ -222,7 +222,7 @@ def download_data(request):
 # @login_required(login_url='/login')
 def download(request):
     # given the nodes, download the associated data
-    odk = OdkForms()
+    odk = OdkParser()
     try:
         data = json.loads(request.body)
         filename = odk.fetch_data(data['form_id'], data['nodes[]'], data['format'])
@@ -245,7 +245,7 @@ def refresh_forms(request):
     """
     Refresh the database with any new forms
     """
-    odk = OdkForms()
+    odk = OdkParser()
 
     try:
         all_forms = odk.refresh_forms()
@@ -290,7 +290,7 @@ def serve_static_files(request, path, insecure=False, **kwargs):
 def manage_mappings(request):
     csrf_token = get_or_create_csrf_token(request)
 
-    odk = OdkForms()
+    odk = OdkParser()
     all_forms = odk.get_all_forms()
     (db_tables, tables_columns) = odk.get_db_tables()
     mappings = odk.mapping_info()
@@ -308,7 +308,7 @@ def manage_mappings(request):
 
 
 def edit_mapping(request):
-    odk = OdkForms()
+    odk = OdkParser()
     if (request.get_full_path() == '/edit_mapping/'):
         response = odk.edit_mapping(request)
 
@@ -316,19 +316,19 @@ def edit_mapping(request):
 
 
 def create_mapping(request):
-    odk = OdkForms()
+    odk = OdkParser()
     mappings = odk.save_mapping(request)
     return return_json(mappings)
 
 
 def delete_mapping(request):
-    odk = OdkForms()
+    odk = OdkParser()
     mappings = odk.delete_mapping(request)
     return return_json(mappings)
 
 
 def clear_mappings(request):
-    odk = OdkForms()
+    odk = OdkParser()
     mappings = odk.clear_mappings()
     return return_json(mappings)
 
@@ -349,7 +349,7 @@ def return_polygons(mappings):
 
 
 def validate_mappings(request):
-    odk = OdkForms()
+    odk = OdkParser()
     (is_fully_mapped, is_mapping_valid, comments) = odk.validate_mappings()
 
     to_return = {'error': False, 'is_fully_mapped': is_fully_mapped, 'is_mapping_valid': is_mapping_valid, 'comments': comments}
@@ -357,7 +357,7 @@ def validate_mappings(request):
 
 
 def manual_data_process(request):
-    odk = OdkForms()
+    odk = OdkParser()
     is_dry_run = json.loads(request.POST['is_dry_run'])
     (is_success, comments) = odk.manual_process_data(is_dry_run)
 
@@ -366,7 +366,7 @@ def manual_data_process(request):
 
 
 def delete_processed_data(request):
-    odk = OdkForms()
+    odk = OdkParser()
     (is_success, comments) = odk.delete_processed_data()
 
     to_return = {'error': is_success, 'comments': comments}
@@ -390,7 +390,7 @@ def fetch_processing_errors(request):
     sorts = json.loads(request.GET['sorts']) if 'sorts' in request.GET else None
     queries = json.loads(request.GET['queries']) if 'queries' in request.GET else None
 
-    odk = OdkForms()
+    odk = OdkParser()
     (is_success, proc_errors) = odk.processing_errors(cur_page, per_page, offset, sorts, queries)
     to_return = json.dumps(proc_errors)
 
@@ -401,7 +401,7 @@ def fetch_processing_errors(request):
 
 def fetch_single_error(request):
     err_id = json.loads(request.POST['err_id'])
-    odk = OdkForms()
+    odk = OdkParser()
     (is_success, cur_error, r_sub) = odk.fetch_single_error(err_id)
 
     to_return = {'error': is_success, 'err_json': cur_error, 'raw_submission': r_sub}
@@ -410,7 +410,7 @@ def fetch_single_error(request):
 
 def map_visualization(request):
     csrf_token = get_or_create_csrf_token(request)
-    odk = OdkForms()
+    odk = OdkParser()
     map_settings = odk.fetch_base_map_settings()
     page_settings = {
         'page_title': "%s | Map Based Visualizations" % settings.SITE_NAME,
@@ -423,7 +423,7 @@ def map_visualization(request):
 
 
 def first_level_geojson(request):
-    odk = OdkForms()
+    odk = OdkParser()
     c_code = json.loads(request.GET['c_code'])
     cur_polygons = odk.first_level_geojson(int(c_code))
 
@@ -432,7 +432,7 @@ def first_level_geojson(request):
 
 def save_json_edits(request):
     err_id = json.loads(request.POST['err_id'])
-    odk = OdkForms()
+    odk = OdkParser()
     (is_error, cur_error) = odk.save_json_edits(err_id, json.loads(request.POST['json_data']))
 
     to_return = {'error': is_error, 'message': cur_error}
@@ -441,7 +441,7 @@ def save_json_edits(request):
 
 def process_single_submission(request):
     err_id = json.loads(request.POST['err_id'])
-    odk = OdkForms()
+    odk = OdkParser()
     (is_error, cur_error) = odk.process_single_submission(err_id)
 
     to_return = {'error': is_error, 'message': cur_error}
@@ -465,7 +465,7 @@ def fetch_processing_status(request):
     sorts = json.loads(request.GET['sorts']) if 'sorts' in request.GET else None
     queries = json.loads(request.GET['queries']) if 'queries' in request.GET else None
 
-    odk = OdkForms()
+    odk = OdkParser()
     (is_success, proc_errors) = odk.fetch_processing_status(cur_page, per_page, offset, sorts, queries)
     to_return = json.dumps(proc_errors)
 
@@ -503,7 +503,7 @@ def forms_settings_info(request):
     sorts = json.loads(request.GET['sorts']) if 'sorts' in request.GET else None
     queries = json.loads(request.GET['queries']) if 'queries' in request.GET else None
 
-    odk = OdkForms()
+    odk = OdkParser()
     (is_success, proc_errors) = odk.get_odk_forms_info(cur_page, per_page, offset, sorts, queries)
     to_return = json.dumps(proc_errors)
 

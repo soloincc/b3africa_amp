@@ -11,10 +11,10 @@ from raven import Client
 # Now import the core parser modules
 from terminal_output import Terminal
 from excel_writer import ExcelWriter
-from models import ODKForm, RawSubmissions, FormViews, ViewsData, ViewTablesLookup, DictionaryItems, FormMappings, ProcessingErrors, ODKFormGroup
+from vendor.models import ODKForm, RawSubmissions, FormViews, ViewsData, ViewTablesLookup, DictionaryItems, FormMappings, ProcessingErrors, ODKFormGroup
 from sql import Query
 
-from .odk_forms import OdkForms
+from vendor.odk_parser import OdkParser
 
 terminal = Terminal()
 sentry = Client('http://412f07efec7d461cbcdaf686c3b01e51:c684fccd436e46169c71f8c841ed3b00@sentry.badili.co.ke/3')
@@ -112,7 +112,7 @@ class AziziAMP():
         with connection.cursor() as cursor:
             form_details_q = 'SELECT c.group_name, a.is_processed, count(*) as r_count FROM raw_submissions as a INNER JOIN odkform as b on a.form_id=b.id INNER JOIN form_groups as c on b.form_group_id=c.id GROUP BY c.group_name, a.is_processed ORDER BY c.group_name, b.form_id, a.is_processed'
             cursor.execute(form_details_q)
-            odk = OdkForms()
+            odk = OdkParser()
             form_details = odk.dictfetchall(cursor)
 
             processing_status = defaultdict(dict)

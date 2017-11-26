@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     'livereload',
     'raven.contrib.django.raven_compat',
 
-    # 'odk_parser',
-    'b3africa'
+    'b3africa',
+    'vendor',
 ]
 
 MIDDLEWARE = [
