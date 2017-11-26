@@ -13,6 +13,7 @@ from ConfigParser import ConfigParser
 from datetime import datetime
 from collections import defaultdict, OrderedDict
 
+from raven import Client
 from django.conf import settings
 from django.forms.models import model_to_dict
 from django.db import connection, connections, transaction, IntegrityError
@@ -22,8 +23,9 @@ from django.http import HttpRequest
 from terminal_output import Terminal
 from excel_writer import ExcelWriter
 from models import ODKForm, RawSubmissions, FormViews, ViewsData, ViewTablesLookup, DictionaryItems, FormMappings, ProcessingErrors, ODKFormGroup
-from sql import Query
+# from sql import Query
 
+sentry = Client('http://412f07efec7d461cbcdaf686c3b01e51:c684fccd436e46169c71f8c841ed3b00@sentry.badili.co.ke/3')
 terminal = Terminal()
 
 LOGGING = {
