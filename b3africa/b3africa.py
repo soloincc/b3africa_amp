@@ -53,54 +53,6 @@ class AziziAMP():
             AssertionError: Incase of empty values, raises an assertion error
         """
         stats = defaultdict(dict)
-        stats['farmers'] = defaultdict(dict)
-        stats['animals'] = defaultdict(dict)
-        stats['formgroups'] = defaultdict(dict)
-
-        with connections['mapped'].cursor() as cursor:
-            # get the number of processed farmers
-            farmers_q = "SELECT count(*) as count from households"
-            cursor.execute(farmers_q)
-            farmers = cursor.fetchone()
-            if farmers is None:
-                raise AssertionError('There was some error while fetching data from the database')
-
-            # get the gender of the household heads
-            farmers_gender_q = "SELECT b.t_value, count(*) FROM `hh_attributes` as a inner join dictionary_items as b on a.attribute_type_id=b.id where b.form_group = 'farmer_reg' and parent_node = 'farmergender' group by attribute_type_id"
-            cursor.execute(farmers_gender_q)
-            farmers_gender = cursor.fetchall()
-            if farmers_gender is None:
-                raise AssertionError('There was some error while fetching data from the database')
-
-            by_gender = []
-            for f_gender in farmers_gender:
-                by_gender.append({'name': f_gender[0], 'y': f_gender[1]})
-
-            # get the number of processed animals
-            animals_q = "SELECT count(*) as count from animals"
-            cursor.execute(animals_q)
-            animals = cursor.fetchone()
-            if animals is None:
-                raise AssertionError('There was some error while fetching data from the database')
-
-            animals_sex_q = "SELECT sex, count(*) from animals group by sex"
-            cursor.execute(animals_sex_q)
-            animals_sex = cursor.fetchall()
-            if animals_sex is None:
-                raise AssertionError('There was some error while fetching data from the database')
-
-            by_sex = []
-            for a_sex in animals_sex:
-                by_sex.append({'name': a_sex[0], 'y': a_sex[1]})
-
-            # get the formgroup processing status
-            formgroup_status = self.formgroup_processing_status()
-
-            stats['farmers']['count'] = farmers[0]
-            stats['farmers']['by_gender'] = by_gender
-            stats['animals']['count'] = animals[0]
-            stats['animals']['by_sex'] = by_sex
-            stats['formgroups']['processing_status'] = formgroup_status
 
         return stats
 

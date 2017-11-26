@@ -143,18 +143,22 @@ def show_landing(request):
 def show_dashboard(request):
     csrf_token = get_or_create_csrf_token(request)
 
+    # check if the settings have been defined(first time visit), if not redirect to the settings page
+    # 
+
     azizi_amp = AziziAMP()
     try:
         stats = azizi_amp.system_stats()
         page_settings = {
             'page_title': "%s | Home" % settings.SITE_NAME,
             'csrf_token': csrf_token,
-            'section_title': 'AziziAMP Overview',
+            'section_title': 'Overview',
             'data': stats,
             'js_data': json.dumps(stats)
         }
         return render(request, 'dash_home.html', page_settings)
     except Exception as e:
+        print str(e)
         terminal.tprint('Error! %s' % str(e), 'fail')
         show_landing(request)
 

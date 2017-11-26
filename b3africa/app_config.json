@@ -3,14 +3,14 @@
         "host":"localhost",
         "user":"root",
         "passwd":"admin",
-        "db":"adgg_v2",
+        "db":"b3africa_parser",
         "port":"3306"
     },
     "mapped":{
         "host":"localhost",
         "user":"root",
         "passwd":"admin",
-        "db":"axgg",
+        "db":"b3africa_dest",
         "port":"3306"
     },
     "onadata":{
