@@ -27,6 +27,8 @@ from vendor.terminal_output import Terminal
 import os
 terminal = Terminal()
 
+page_settings = {'site_name': settings.SITE_NAME}
+
 
 def login_page(request):
     csrf_token = get_or_create_csrf_token(request)
@@ -67,7 +69,7 @@ def logout_view(request):
 
 
 def under_review_page(request):
-    return render(request, 'under_review.html')
+    return render(request, 'under_review.html', page_settings)
 
 
 @login_required(login_url='/login')
@@ -168,6 +170,7 @@ def show_dashboard(request):
             'csrf_token': csrf_token,
             'section_title': 'Overview',
             'data': stats,
+            'site_name': settings.SITE_NAME,
             'js_data': json.dumps(stats)
         }
         return render(request, 'dash_home.html', page_settings)
