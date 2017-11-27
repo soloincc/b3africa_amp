@@ -70,7 +70,7 @@ def under_review_page(request):
     return render(request, 'under_review.html')
 
 
-# @login_required(login_url='/login')
+@login_required(login_url='/login')
 def download_page(request):
     csrf_token = get_or_create_csrf_token(request)
 
@@ -87,7 +87,7 @@ def download_page(request):
     return render(request, 'download.html', page_settings)
 
 
-# @login_required(login_url='/login')
+@login_required(login_url='/login')
 def modify_view(request):
 
     odk = OdkParser()
@@ -99,7 +99,7 @@ def modify_view(request):
     return HttpResponse(json.dumps(response))
 
 
-# @login_required(login_url='/login')
+@login_required(login_url='/login')
 def manage_views(request):
     csrf_token = get_or_create_csrf_token(request)
 
@@ -116,15 +116,15 @@ def manage_views(request):
     return render(request, 'manage_views.html', page_settings)
 
 
-# @login_required(login_url='/login')
+@login_required(login_url='/login')
 def update_db(request):
+    get_or_create_csrf_token(request)
     odk = OdkParser()
 
     try:
         odk.update_sdss_db()
-    except Exception as e:
+    except Exception:
         logging.error(traceback.format_exc())
-        print str(e)
         return HttpResponse(traceback.format_exc())
 
     return HttpResponse(json.dumps({'error': False, 'message': 'Database updated'}))
