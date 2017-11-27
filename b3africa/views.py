@@ -31,7 +31,7 @@ terminal = Terminal()
 def login_page(request):
     csrf_token = get_or_create_csrf_token(request)
     page_settings = {'page_title': "%s | Login Page" % settings.SITE_NAME, 'csrf_token': csrf_token}
-    terminal.tprint(csrf_token, 'ok')
+    terminal.tprint(json.dumps(request.POST), 'ok')
 
     try:
         username = request.POST['username']
@@ -81,6 +81,7 @@ def download_page(request):
         'page_title': "%s | Downloads" % settings.SITE_NAME,
         'csrf_token': csrf_token,
         'section_title': 'Download Section',
+        'site_name': 'Site Name from Database',
         'all_forms': json.dumps(all_forms)
     }
     return render(request, 'download.html', page_settings)
@@ -505,6 +506,15 @@ def forms_settings_info(request):
     response['Content-Message'] = to_return
     return response
 
+
+def save_settings(request):
+    # saves the settings as pased from the front end
+    csrf_token = get_or_create_csrf_token(request)
+
+    parser = OdkParser()
+    result = parser.save_settings(request)
+
+    return return_json(result)
 
 def zip_response(json_data):
     gzip_buffer = IO()

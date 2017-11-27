@@ -139,6 +139,7 @@ function BadiliDash() {
     $('#confirm_delete_data').on('click', this.clearProcessedData);
     $('#confirm_save_edits').on('click', this.saveEditedJson);
     $('#confirm_process_submission').on('click', this.processCurSubmission);
+    $('#save_sys_settings, #save_db_settings').on('click', this.saveSystemSettings);
     
     $(document).on('click', '.edit_record', this.viewRawSubmission);
 }
@@ -1462,6 +1463,38 @@ BadiliDash.prototype.refreshODKFormsTable = function(data){
         $('#test_mappings').removeClass('disabled');
         $('#clear_mappings').removeClass('disabled');
     }
+};
+
+BadiliDash.prototype.saveSystemSettings = function(event){
+    var cur_form_id = (this.id == 'save_sys_settings') ? 'save_settings' : 'destination_db';
+    var entered_data = $('#'+cur_form_id).serializeArray();
+    $("#"+cur_form_id).validate({
+        rules: {
+            no_dry_ran_rec: {
+                required: true,
+                digits: true
+            }
+        }
+    });
+    if($("#"+cur_form_id).valid() == false){
+        return;
+    }
+
+    event.preventDefault();
+    // {'err_id': dash.cur_error_id, 'json_data': JSON.stringify(edited_json)
+    $('#spinnermModal').modal('show');
+    $.ajax({
+        type: "POST", url: "/save_settings/", dataType: 'json', data: entered_data,
+        error: dash.communicationError,
+        success: function (data) {
+            $('#spinnermModal').modal('hide');
+            if (data.error) {
+                dash.showNotification('There was an error while saving the edits. Please contact the system administrator!', 'error', true);
+            } else {
+                dash.showNotification('The edits were saved successfully!', 'success', true);
+            }
+        }
+    });
 };
 
 var dash = new BadiliDash();
