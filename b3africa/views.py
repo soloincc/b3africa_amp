@@ -74,6 +74,11 @@ def under_review_page(request):
 def download_page(request):
     csrf_token = get_or_create_csrf_token(request)
 
+    parser = OdkParser()
+    is_first_login = parser.is_first_login()
+    if is_first_login is True:
+        return system_settings(request)
+
     # get all the data to be used to construct the tree
     odk = OdkParser()
     all_forms = odk.get_all_forms()
@@ -102,6 +107,11 @@ def modify_view(request):
 @login_required(login_url='/login')
 def manage_views(request):
     csrf_token = get_or_create_csrf_token(request)
+
+    parser = OdkParser()
+    is_first_login = parser.is_first_login()
+    if is_first_login is True:
+        return system_settings(request)
 
     # get all the data to be used to construct the tree
     odk = OdkParser()
@@ -145,10 +155,13 @@ def show_dashboard(request):
     csrf_token = get_or_create_csrf_token(request)
 
     # check if the settings have been defined(first time visit), if not redirect to the settings page
-    # 
-
     azizi_amp = AziziAMP()
     try:
+        parser = OdkParser()
+        is_first_login = parser.is_first_login()
+        if is_first_login is True:
+            return system_settings(request)
+
         stats = azizi_amp.system_stats()
         page_settings = {
             'page_title': "%s | Home" % settings.SITE_NAME,
@@ -217,8 +230,12 @@ def download_data(request):
 # @login_required(login_url='/login')
 def download(request):
     # given the nodes, download the associated data
-    odk = OdkParser()
     try:
+        odk = OdkParser()
+        parser = OdkParser()
+        is_first_login = parser.is_first_login()
+        if is_first_login is True:
+            return system_settings(request)
         data = json.loads(request.body)
         filename = odk.fetch_data(data['form_id'], data['nodes[]'], data['format'])
     except KeyError:
@@ -284,6 +301,11 @@ def serve_static_files(request, path, insecure=False, **kwargs):
 
 def manage_mappings(request):
     csrf_token = get_or_create_csrf_token(request)
+
+    parser = OdkParser()
+    is_first_login = parser.is_first_login()
+    if is_first_login is True:
+        return system_settings(request)
 
     odk = OdkParser()
     all_forms = odk.get_all_forms()
@@ -370,6 +392,12 @@ def delete_processed_data(request):
 
 def processing_errors(request):
     csrf_token = get_or_create_csrf_token(request)
+
+    parser = OdkParser()
+    is_first_login = parser.is_first_login()
+    if is_first_login is True:
+        return system_settings(request)
+
     page_settings = {
         'page_title': "%s | Processing Errors" % settings.SITE_NAME,
         'csrf_token': csrf_token,
@@ -445,6 +473,12 @@ def process_single_submission(request):
 
 def processing_status(request):
     csrf_token = get_or_create_csrf_token(request)
+
+    parser = OdkParser()
+    is_first_login = parser.is_first_login()
+    if is_first_login is True:
+        return system_settings(request)
+
     page_settings = {
         'page_title': "%s | Processing Status" % settings.SITE_NAME,
         'csrf_token': csrf_token,
@@ -483,6 +517,10 @@ def system_settings(request):
 def forms_settings(request):
     csrf_token = get_or_create_csrf_token(request)
 
+    parser = OdkParser()
+    is_first_login = parser.is_first_login()
+    if is_first_login is True:
+        return system_settings(request)
     page_settings = {
         'page_title': "%s | Home" % settings.SITE_NAME,
         'csrf_token': csrf_token,
