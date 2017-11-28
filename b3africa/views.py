@@ -176,7 +176,8 @@ def show_dashboard(request):
             'site_name': settings.SITE_NAME,
             'js_data': json.dumps(stats)
         }
-        return render(request, 'dash_home.html', page_settings)
+        # return render(request, 'dash_home.html', page_settings)
+        return system_settings(request)
     except Exception as e:
         print str(e)
         terminal.tprint('Error! %s' % str(e), 'fail')
