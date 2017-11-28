@@ -22,7 +22,7 @@ services:
       - §§INSTANCE-azizi-amp-data
 
   §§INSTANCE-azizi-amp-web:
-    image: bibbox/amp
+    image: soloincc/azizi_amp
     container_name: §§INSTANCE-azizi-amp-web
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8089"
     networks:
