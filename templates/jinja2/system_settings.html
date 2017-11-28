@@ -8,7 +8,7 @@
 
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>System Settings</h5>
@@ -67,7 +67,44 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>ONA Data Settings</h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal cmxform" id='ona_api' action='/save_ona_settings/' method='POST'>
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                        <div class="form-group"><label class="col-lg-3 control-label" for='ona_url'>URL</label>
+                            <div class="col-lg-9">
+                                <input type="text" placeholder="Ona URL" class="form-control" name='ona_url' required>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-lg-3 control-label" for='ona_user'>User</label>
+                            <div class="col-lg-9">
+                                <input type="text" placeholder="Ona User" class="form-control" name='ona_user' required>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-lg-3 control-label" for='ona_password'>Password</label>
+                            <div class="col-lg-9">
+                                <input type="text" placeholder="Ona Password" class="form-control" name='ona_password' required>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-lg-3 control-label" for='ona_api'>API Token</label>
+                            <div class="col-lg-9">
+                                <input type="text" placeholder="Ona API Token" class="form-control" name='ona_api_token' required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-offset-2 col-lg-9">
+                                <button class="btn btn-sm btn-primary pull-right m-t-n-xs" id='save_ona_settings' type="submit"><strong>Save</strong></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>Destination Database Settings (MySQL)</h5>
@@ -93,11 +130,6 @@
                         <div class="form-group"><label class="col-lg-3 control-label" for='dest_db_password'>Password</label>
                             <div class="col-lg-9">
                                 <input type="password" placeholder="Password" class="form-control" name='dest_db_password' required>
-                            </div>
-                        </div>
-                        <div class="form-group"><label class="col-lg-3 control-label" for='dest_db_confirm_password'>Confirm</label>
-                            <div class="col-lg-9">
-                                <input type="password" placeholder="Confirm Password" class="form-control" name='dest_db_confirm_password' required>
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='dest_db_port'>Port</label>

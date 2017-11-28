@@ -139,7 +139,7 @@ function BadiliDash() {
     $('#confirm_delete_data').on('click', this.clearProcessedData);
     $('#confirm_save_edits').on('click', this.saveEditedJson);
     $('#confirm_process_submission').on('click', this.processCurSubmission);
-    $('#save_sys_settings, #save_db_settings').on('click', this.saveSystemSettings);
+    $('#save_sys_settings, #save_db_settings, #save_ona_settings').on('click', this.saveSystemSettings);
     
     $(document).on('click', '.edit_record', this.viewRawSubmission);
 }
@@ -1466,16 +1466,27 @@ BadiliDash.prototype.refreshODKFormsTable = function(data){
 };
 
 BadiliDash.prototype.saveSystemSettings = function(event){
-    var cur_form_id = (this.id == 'save_sys_settings') ? 'save_settings' : 'destination_db';
-    var entered_data = $('#'+cur_form_id).serializeArray();
-    $("#"+cur_form_id).validate({
-        rules: {
-            no_dry_ran_rec: {
-                required: true,
-                digits: true
+    if(this.id == 'save_sys_settings'){
+        var cur_form_id = 'save_settings';
+        $("#"+cur_form_id).validate({
+            rules: {
+                no_dry_ran_rec: {
+                    required: true,
+                    digits: true
+                }
             }
-        }
-    });
+        });
+    }
+    else if(this.id == 'save_db_settings'){
+        var cur_form_id = 'destination_db';
+        $("#"+cur_form_id).validate();
+    }
+    else if(this.id == 'save_ona_settings'){
+        var cur_form_id = 'ona_api';
+        $("#"+cur_form_id).validate();
+    }
+    var entered_data = $('#'+cur_form_id).serializeArray();
+    
     if($("#"+cur_form_id).valid() == false){
         return;
     }

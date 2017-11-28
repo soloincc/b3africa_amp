@@ -78,7 +78,8 @@ def download_page(request):
 
     parser = OdkParser()
     is_first_login = parser.is_first_login()
-    if is_first_login is True:
+    are_ona_settings_saved = parser.are_ona_settings_saved()
+    if is_first_login is True or are_ona_settings_saved is False:
         return system_settings(request)
 
     # get all the data to be used to construct the tree
@@ -112,7 +113,8 @@ def manage_views(request):
 
     parser = OdkParser()
     is_first_login = parser.is_first_login()
-    if is_first_login is True:
+    are_ona_settings_saved = parser.are_ona_settings_saved()
+    if is_first_login is True or are_ona_settings_saved is False:
         return system_settings(request)
 
     # get all the data to be used to construct the tree
@@ -161,7 +163,8 @@ def show_dashboard(request):
     try:
         parser = OdkParser()
         is_first_login = parser.is_first_login()
-        if is_first_login is True:
+        are_ona_settings_saved = parser.are_ona_settings_saved()
+        if is_first_login is True or are_ona_settings_saved is False:
             return system_settings(request)
 
         stats = azizi_amp.system_stats()
@@ -307,7 +310,8 @@ def manage_mappings(request):
 
     parser = OdkParser()
     is_first_login = parser.is_first_login()
-    if is_first_login is True:
+    are_ona_settings_saved = parser.are_ona_settings_saved()
+    if is_first_login is True or are_ona_settings_saved is False:
         return system_settings(request)
 
     odk = OdkParser()
@@ -398,7 +402,8 @@ def processing_errors(request):
 
     parser = OdkParser()
     is_first_login = parser.is_first_login()
-    if is_first_login is True:
+    are_ona_settings_saved = parser.are_ona_settings_saved()
+    if is_first_login is True or are_ona_settings_saved is False:
         return system_settings(request)
 
     page_settings = {
@@ -479,7 +484,8 @@ def processing_status(request):
 
     parser = OdkParser()
     is_first_login = parser.is_first_login()
-    if is_first_login is True:
+    are_ona_settings_saved = parser.are_ona_settings_saved()
+    if is_first_login is True or are_ona_settings_saved is False:
         return system_settings(request)
 
     page_settings = {
