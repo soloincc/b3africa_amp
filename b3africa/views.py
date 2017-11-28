@@ -536,12 +536,23 @@ def forms_settings(request):
     is_first_login = parser.is_first_login()
     if is_first_login is True:
         return system_settings(request)
+
+    all_forms = parser.get_odk_forms_info()
     page_settings = {
         'page_title': "%s | Home" % settings.SITE_NAME,
         'csrf_token': csrf_token,
+        'forms': json.dumps(all_forms),
         'section_title': 'Manage %s Forms' % settings.SITE_NAME
     }
     return render(request, 'forms_settings.html', page_settings)
+
+
+def save_form_settings(request):
+    parser = OdkParser()
+    if (request.get_full_path() == '/save_form_settings/'):
+        response = parser.save_form_settings(request)
+
+    return HttpResponse(json.dumps(response))
 
 
 def forms_settings_info(request):

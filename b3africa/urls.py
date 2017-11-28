@@ -58,5 +58,6 @@ urlpatterns = [
     url(r'^system_settings/$', views.system_settings, name='system_settings'),
     url(r'^forms_settings/$', views.forms_settings, name='forms_settings'),
     url(r'^forms_settings_info/$', views.forms_settings_info, name='forms_settings_infoinfo'),
+    url(r'^save_form_settings/$', views.save_form_settings, name='save_form_settings'),
     url(r'^save_settings/$', views.save_settings, name='save_settings'),
 ]

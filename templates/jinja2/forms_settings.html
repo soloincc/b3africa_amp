@@ -16,17 +16,49 @@
                         <h5>Forms Settings</h5>
                     </div>
                     <div class="ibox-content">
-                        <table id='form_settings_table' class='table'>
-                            <thead>
-                                <th data-dynatable-column="id">ID</th>
-                                <th data-dynatable-column="form_name">Form Name</th>
-                                <th data-dynatable-column="form_group">Form Group</th>
-                                <th data-dynatable-column="full_form_id">Full Form ID</th>
-                                <th data-dynatable-column="auto_update">Auto Process</th>
-                                <th data-dynatable-column="is_source_deleted">Is Deleted</th>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <table id='form_settings_table' class='table' data-paging="true" data-filtering="true" data-sorting="true" data-editing="true" data-state="true"></table>
+
+                        <!-- Editing Modal Markup -->
+                        <div class="modal fade" id="form-settings-modal" tabindex="-1" role="dialog" aria-labelledby="editor-title">
+                            <style scoped>
+                                
+                            </style>
+                            <div class="modal-dialog" role="document">
+                                <form class="modal-content form-horizontal" id="mapping_editor">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        <h4 class="modal-title" id="editor-title">Edit a Form</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="number" id="form_id" name="form_id" class="hidden"/>
+                                        <div class="form-group">
+                                            <label for="group_name" class="col-sm-4 control-label">Group Name</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" id="group_name" name="group_name" placeholder="Group Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="auto_process" class="col-sm-4 control-label">Auto Process</label>
+                                            <div class="col-sm-8">
+                                                <input type="radio" name="auto_process" id="auto_process_yes" value='yes'>Yes
+                                                <input type="radio" name="auto_process" id="auto_process_no" value='no'>No
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="is_deleted" class="col-sm-4 control-label">Is Deleted Upstream</label>
+                                            <div class="col-sm-8">
+                                                <input type="radio" name="is_deleted" id="is_deleted_yes" value='yes'>Yes
+                                                <input type="radio" name="is_deleted" id="is_deleted_no" value='no'>No
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Save changes</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,8 +190,12 @@
         </div>
     </div>
 
+
     <script type="text/javascript" src="{{ static('bower/jqwidgets/jqwidgets/jqxcore.js') }}"></script>
     <script type="text/javascript" src="{{ static('bower/jqwidgets/jqwidgets/jqxnotification.js') }}"></script>
+        
+    <script type='text/javascript' src="{{ static('bower/footables/compiled/footable.js') }}"></script>
+
 
     <script type="text/javascript" src="{{ static('bower/dynatable/jquery.dynatable.js') }}"></script>
     <script type="text/javascript" src="{{ static('bower/json-editor/dist/jsoneditor.min.js') }}"></script>
@@ -169,7 +205,9 @@
     <script>
         $(document).ready(function(){
             BadiliDash.data = {};
-            dash.initiateFormSettingsPage();
+
+            dash.data.all_forms = {{ forms | safe}};
+            dash.initiateFormSettingsPage(dash.data.all_forms);
         });
     </script>
 </div>

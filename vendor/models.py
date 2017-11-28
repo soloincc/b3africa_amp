@@ -45,7 +45,7 @@ class Attribute(BaseTable):
 
 class ODKFormGroup(BaseTable):
     # define the dictionary structure
-    order_index = models.IntegerField(unique=True)
+    order_index = models.SmallIntegerField(null=True)
     group_name = models.CharField(max_length=100, unique=True)
     comments = models.CharField(max_length=1000, null=True)
 

@@ -1396,18 +1396,82 @@ BadiliDash.prototype.initiate_adgg_dash = function(){
     });
 };
 
-BadiliDash.prototype.initiateFormSettingsPage = function(){
-    dash.error_table = $('#form_settings_table').dynatable({
-      dataset: {
-        paginate: true,
-        recordCount: true,
-        sorting: true,
-        ajax: true,
-        ajaxUrl: '/forms_settings_info/',
-        ajaxOnLoad: true,
-        records: []
-      }
+BadiliDash.prototype.initiateFormSettingsPage = function(data){
+    // create the grid with the views data
+    var $modal = $('#form-settings-modal'), $editor = $('#mapping_editor'), $editorTitle = $('#editor-title');
+    var ft;
+
+    var columns = [
+        {'name': 'form_id', 'title': 'ID', 'visible': false},
+        {"name": "_selection", "title" : "Selection", 'visible': false, "sortable": false, "filterable":false},
+        {"name": "_checkbox", "title" : "<input type='checkbox' class='global-checkbox'>", 'visible': true, "sortable": false, "filterable":false},
+        {'name': 'form_name', 'title': 'Form Name'},
+        {'name': 'group_name', 'title': 'Form Group'},
+        {'name': 'full_form_id', 'title': 'Full Form ID'},
+        {"name": "_auto_process", "title" : "Auto Process"},
+        {"name": "_is_deleted", "title" : "Deleted Upstream"},
+    ];
+
+    if(dash.ft == undefined){
+        dash.ft = FooTable.init('#form_settings_table', {
+            columns: columns,
+            rows: data,
+            editing: {
+                alwaysShow: true,
+                editRow: function(row){
+                    var values = row.val();
+                    $editor.find('#form_id').val(values.form_id);
+                    $editor.find('#form_group_name').val(values.form_group);
+                    if (values.is_auto_process == true){
+                        $editor.find('#is_auto_process_yes').prop('checked', true);
+                    }
+                    else{
+                        $editor.find('#is_auto_process_no').prop('checked', true);
+                    }
+                    $modal.data('row', row);
+                    $editorTitle.text(sprintf('Modify form settings for %s', values.form_name));
+                    $modal.modal('show');
+                }
+            }
+        }),
+        uid = 10001;
+        $editor.on('submit', dash.submitFormEdits);
+    }
+    else{
+        dash.ft.rows.load(data);
+    }
+};
+
+BadiliDash.prototype.submitFormEdits = function(e){
+    var $modal = $('#form-settings-modal'), $editor = $('#mapping_editor'), $editorTitle = $('#editor-title');
+    if (this.checkValidity && !this.checkValidity()){
+        return;
+    }
+    e.preventDefault();
+    var row = $modal.data('row'),
+        values = {
+            form_id: $editor.find('#form_id').val(),
+            group_name: $editor.find('#group_name').val(),
+            auto_process: $editor.find('[name=auto_process]:checked').val() == 'yes' ? true : false,
+            is_deleted: $editor.find('[name=is_deleted]:checked').val() == 'yes' ? true : false
+        };
+
+    $('#spinnerModal').modal('show');
+    $.ajax({
+        type: "POST", url: "/save_form_settings/", dataType: 'json', data: {'form': JSON.stringify(values)},
+        error: dash.communicationError,
+        success: function (data) {
+            $('#spinnermModal').modal('hide');
+            if (data.error) {
+                dash.showNotification(data.message, 'danger', true);
+                return;
+            }
+            else {
+                dash.initiateFormSettingsPage(data.allforms);
+            }
+        }
     });
+    $modal.modal('hide');
 };
 
 BadiliDash.prototype.refreshODKFormsTable = function(data){
