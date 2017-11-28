@@ -1,0 +1,56 @@
+version: '2'
+
+services:
+  azizi-amp-db:
+    container_name: azizi-amp-db
+    restart: unless-stopped
+    # networks:
+    #   - bibbox-default-network
+    image: mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=adgg_v2
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=admin
+    depends_on:
+      - azizi-amp-data
+    volumes_from: 
+      - azizi-amp-data
+
+  azizi-amp-web:
+    build: .
+    command:  bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8089"
+    # command: pwd
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=adgg_v2
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=admin
+      - MYSQL_HOST=azizi-amp-db
+      - MYSQL_PORT=3306
+
+      # Variables for the mapped database instance
+      # - MAPPED_DATABASE=§§MAPPED_DATABASE
+      # - MAPPED_USER=§§MAPPED_USER
+      # - MAPPED_PASSWORD=§§MAPPED_PASSWORD
+      # - MAPPED_HOST=§§MAPPED_HOST
+      # - MAPPED_PORT=§§MAPPED_PORT
+
+      # Variables for the Onadata server
+      # - ONA_HOST=§§ONA_HOST
+      # - ONA_USER=§§ONA_USER
+      # - ONA_PASSWORD=§§ONA_PASSWORD
+      # - ONA_API_TOKEN=§§ONA_API 
+    ports:
+      - "8089:8089"
+    depends_on:
+      - azizi-amp-db
+      - azizi-amp-data
+    volumes_from: 
+      - azizi-amp-data
+
+  azizi-amp-data:
+    image: busybox
+    container_name: azizi-amp-data
+    volumes:
+      - .:/opt/azizi-amp

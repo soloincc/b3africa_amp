@@ -7,6 +7,5 @@ static/admin
 js/plugins
 static/plugins
 adgg_tz/app_config.json
-docker-compose.yml
 data
 vendor
