@@ -1,15 +1,19 @@
 version: '2'
 
+networks:
+    bibbox-default-network:
+      external: true
+
 services:
   azizi-amp-db:
     container_name: azizi-amp-db
     restart: unless-stopped
-    # networks:
-    #   - bibbox-default-network
+    networks:
+      - bibbox-default-network
     image: mariadb
     environment:
       - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=adgg_v2
+      - MYSQL_DATABASE=b3africa
       - MYSQL_USER=root
       - MYSQL_PASSWORD=admin
     depends_on:
@@ -18,12 +22,15 @@ services:
       - azizi-amp-data
 
   azizi-amp-web:
-    build: .
+    image: soloincc/azizi_amp
     command:  bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8089"
-    # command: pwd
+    networks:
+      - bibbox-default-network
+    links:
+      - "azizi-amp-db:azizi-amp-db"
     environment:
       - MYSQL_ROOT_PASSWORD=admin
-      - MYSQL_DATABASE=adgg_v2
+      - MYSQL_DATABASE=b3africa
       - MYSQL_USER=root
       - MYSQL_PASSWORD=admin
       - MYSQL_HOST=azizi-amp-db
@@ -53,4 +60,5 @@ services:
     image: busybox
     container_name: azizi-amp-data
     volumes:
-      - .:/opt/azizi-amp
+      - ./data/mysql:/var/lib/mysql
+      - ./azizi-amp:/opt/azizi-amp
