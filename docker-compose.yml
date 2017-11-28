@@ -22,8 +22,8 @@ services:
       - azizi-amp-data
 
   azizi-amp-web:
-    build: .
-    # image: bibbox/amp
+    # build: .
+    image: bibbox/amp
     command:  bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8089"
     networks:
       - bibbox-default-network
