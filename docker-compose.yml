@@ -22,7 +22,7 @@ services:
       - azizi-amp-data
 
   azizi-amp-web:
-    image: soloincc/azizi_amp
+    image: bibbox/amp
     command:  bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8089"
     networks:
       - bibbox-default-network
