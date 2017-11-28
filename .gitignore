@@ -9,3 +9,4 @@ static/plugins
 adgg_tz/app_config.json
 data
 vendor
+docker-compose.yml
