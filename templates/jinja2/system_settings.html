@@ -21,38 +21,38 @@
                                 <div class="form-group">
                                     <label for="system_name" class="col-lg-3 control-label">System Name *</label>
                                     <div class="col-lg-9">
-                                        <input type="text" placeholder="System Name" class="form-control" id='system_name' name="system_name" minlength="2" required> 
+                                        <input type="text" placeholder="System Name" class="form-control" id='system_name' name="system_name" minlength="2" value="{{ settings['system_name'] or '' }}" required> 
                                         <span class="help-block m-b-none">The name that you would like to give this instance</span>
                                     </div>
                                 </div>
                                 <div class="form-group"><label class="col-lg-3 control-label" for='no_dry_ran_rec'>Dry Ran Records *</label>
                                     <div class="col-lg-9">
-                                        <input type="text" placeholder="Dry Run Records" class="form-control" name='no_dry_ran_rec' required value='50'>
+                                        <input type="text" placeholder="Dry Run Records" class="form-control" name='no_dry_ran_rec' required value="{{ settings['no_dry_ran_rec'] or '' }}">
                                         <span class="help-block m-b-none">The number of records to use when performing a dry run</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-lg-3 control-label" for='default_locale'>Default Language</label>
                                     <div class="col-lg-9">
-                                        <input type="text" placeholder="EN" class="form-control" name="default_locale" value='EN'>
+                                        <input type="text" placeholder="EN" class="form-control" name="default_locale" value="{{ settings['default_locale'] or '' }}">
                                         <span class="help-block m-b-none">The default language to use in case of multiple languages in ODK</span>
                                     </div>
                                 </div>
                                 <div class="form-group"><label class="col-lg-3 control-label" for='lookup_table'>Lookup Table Name</label>
                                     <div class="col-lg-9">
-                                        <input type="text" placeholder="Lookup Table" class="form-control" name="lookup_table">
+                                        <input type="text" placeholder="Lookup Table" class="form-control" name="lookup_table" value="{{ settings['lookup_table'] or '' }}">
                                         <span class="help-block m-b-none">The lookup table where the ODK data/options are saved</span>
                                     </div>
                                 </div>
                                 <div class="form-group"><label class="col-lg-3 control-label" for='joiner'>Joining String</label>
                                     <div class="col-lg-9">
-                                        <input type="text" placeholder="Joiner" class="form-control" name='joiner' value='-'>
+                                        <input type="text" placeholder="Joiner" class="form-control" name='joiner' value="{{ settings['joiner'] or '' }}">
                                         <span class="help-block m-b-none">The string to use as a joiner when multiple data sources are defined for a single destination</span>
                                     </div>
                                 </div>
                                 <div class="form-group"><label class="col-lg-3 control-label" for='sentry_api'>Sentry Error Logging</label>
                                     <div class="col-lg-9">
-                                        <input type="text" placeholder="Sentry URL" class="form-control" name='sentry_api'>
+                                        <input type="text" placeholder="Sentry URL" class="form-control" name='sentry_api' value="{{ settings['sentry_api'] or '' }}">
                                         <span class="help-block m-b-none">The Sentry URL to use to log exceptions arising from the system</span>
                                     </div>
                                 </div>
@@ -77,22 +77,22 @@
                         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                         <div class="form-group"><label class="col-lg-3 control-label" for='ona_url'>URL</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="Ona URL" class="form-control" name='ona_url' required>
+                                <input type="text" placeholder="Ona URL" class="form-control" name='ona_url' value="{{ settings['ona_url'] or '' }}" required>
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='ona_user'>User</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="Ona User" class="form-control" name='ona_user' required>
+                                <input type="text" placeholder="Ona User" class="form-control" name='ona_user' required value="{{ settings['ona_user'] or '' }}">
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='ona_password'>Password</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="Ona Password" class="form-control" name='ona_password' required>
+                                <input type="password" placeholder="Ona Password" class="form-control" name='ona_password' required value="{{ settings['ona_password'] or '' }}">
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='ona_api'>API Token</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="Ona API Token" class="form-control" name='ona_api_token' required>
+                                <input type="text" placeholder="Ona API Token" class="form-control" name='ona_api_token' required value="{{ settings['ona_api_token'] or '' }}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -114,27 +114,27 @@
                         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                         <div class="form-group"><label class="col-lg-3 control-label" for='host_name'>Host</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="Server Host" class="form-control" name='host_name' required>
+                                <input type="text" placeholder="Server Host" class="form-control" name='host_name' required value="{{ settings['host_name'] or '' }}">
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='dest_db_name'>Database</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="DB Name" class="form-control" name='dest_db_name' required>
+                                <input type="text" placeholder="DB Name" class="form-control" name='dest_db_name' required value="{{ settings['dest_db_name'] or '' }}">
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='dest_db_username'>Username</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="User" class="form-control" name='dest_db_username' required>
+                                <input type="text" placeholder="User" class="form-control" name='dest_db_username' required value="{{ settings['dest_db_username'] or '' }}">
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='dest_db_password'>Password</label>
                             <div class="col-lg-9">
-                                <input type="password" placeholder="Password" class="form-control" name='dest_db_password' required>
+                                <input type="password" placeholder="Password" class="form-control" name='dest_db_password' required value="{{ settings['dest_db_password'] or '' }}">
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='dest_db_port'>Port</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="Port" class="form-control" name='dest_db_port' required>
+                                <input type="text" placeholder="Port" class="form-control" name='dest_db_port' required value="{{ settings['dest_db_port'] or '' }}">
                             </div>
                         </div>
                         <div class="form-group">

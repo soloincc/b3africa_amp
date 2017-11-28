@@ -515,9 +515,15 @@ def fetch_processing_status(request):
 def system_settings(request):
     csrf_token = get_or_create_csrf_token(request)
 
+    parser = OdkParser()
+    all_settings = parser.get_all_settings()
+    print 'settings'
+    print all_settings
+
     page_settings = {
         'page_title': "%s | Home" % settings.SITE_NAME,
         'csrf_token': csrf_token,
+        'settings': all_settings,
         'section_title': 'Manage %s Settings' % settings.SITE_NAME
     }
     return render(request, 'system_settings.html', page_settings)
