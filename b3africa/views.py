@@ -538,7 +538,7 @@ def forms_settings(request):
     if is_first_login is True:
         return system_settings(request)
 
-    all_forms = parser.get_odk_forms_info()
+    all_forms = parser.get_odk_forms_list()
     page_settings = {
         'page_title': "%s | Home" % settings.SITE_NAME,
         'csrf_token': csrf_token,
