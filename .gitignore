@@ -2,10 +2,6 @@
 *.xlsx
 *.pyc
 env
-static/bower
-static/admin
-js/plugins
-static/plugins
 adgg_tz/app_config.json
 data
 docker-compose.yml
