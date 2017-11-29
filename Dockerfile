@@ -7,7 +7,7 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
     mysql-client \
-    libmysqlclient-dev
+    libmysqlclient-dev \
     git
 #     python \
 #     python-dev \
