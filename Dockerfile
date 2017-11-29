@@ -8,12 +8,15 @@ RUN apt-get update && \
     apt-get install -y \
     mysql-client \
     libmysqlclient-dev \
-    git
-#     python \
-#     python-dev \
-#     python-setuptools \
-#     python-pip \
-#     nginx \
+    git \
+    curl \
+    wget \
+    npm
+
+RUN ln -s /usr/bin/nodejs /usr/bin/node
+
+# install bower
+RUN npm install --global bower
 
 # install uwsgi now because it takes a little while
 RUN pip install --upgrade pip && \
@@ -35,13 +38,8 @@ COPY . /opt/azizi_amp/
 # CMD ["uwsgi", "--ini", "/opt/azizi-amp/default_uwsgi.ini"]
 
 WORKDIR /opt/azizi_amp
-# RUN git clone --depth=1 https://github.com/badili/odk_parser /opt/azizi_amp/vendor
 
-# Manually start the server for now
-# CMD python manage.py runserver
-
-# Add any custom, static environment variables needed by Django or your settings file here:
-# ENV DJANGO_SETTINGS_MODULE=azizi_amp.settings
+RUN bower install --allow-root
 
 # uWSGI configuration (customize as needed):
 # ENV UWSGI_VIRTUALENV=/venv UWSGI_WSGI_FILE=azizi_amp/uwsgi.ini UWSGI_HTTP=:8089 UWSGI_MASTER=1 UWSGI_WORKERS=2 UWSGI_THREADS=8 UWSGI_UID=1000 UWSGI_GID=2000 UWSGI_LAZY_APPS=1 UWSGI_WSGI_ENV_BEHAVIOR=holy
@@ -54,6 +52,7 @@ WORKDIR /opt/azizi_amp
 
 ADD scripts /opt/scripts
 WORKDIR /opt/scripts
+
 RUN chmod a+x *.sh
 
 ENTRYPOINT ["/opt/scripts/entrypoint.sh"]
