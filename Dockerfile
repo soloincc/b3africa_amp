@@ -53,6 +53,7 @@ RUN bower install --allow-root
 ADD scripts /opt/scripts
 WORKDIR /opt/scripts
 
+
 RUN chmod a+x *.sh
 
 ENTRYPOINT ["/opt/scripts/entrypoint.sh"]
