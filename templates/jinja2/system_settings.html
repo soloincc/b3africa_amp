@@ -114,27 +114,27 @@
                         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                         <div class="form-group"><label class="col-lg-3 control-label" for='host_name'>Host</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="Server Host" class="form-control" name='dest_db_host_name' required value="{{ settings['dest_db_host_name'] or '' }}">
+                                <input type="text" placeholder="Server Host" class="form-control" name='dest_db_host_name' required value="{{ settings['dest_db_host_name'] or 'azizi-amp-db' }}">
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='dest_db_name'>Database</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="DB Name" class="form-control" name='dest_db_name' required value="{{ settings['dest_db_name'] or '' }}">
+                                <input type="text" placeholder="DB Name" class="form-control" name='dest_db_name' required value="{{ settings['dest_db_name'] or 'axgg' }}">
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='dest_db_username'>Username</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="User" class="form-control" name='dest_db_username' required value="{{ settings['dest_db_username'] or '' }}">
+                                <input type="text" placeholder="User" class="form-control" name='dest_db_username' required value="{{ settings['dest_db_username'] or 'root' }}">
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='dest_db_password'>Password</label>
                             <div class="col-lg-9">
-                                <input type="password" placeholder="Password" class="form-control" name='dest_db_password' required value="{{ settings['dest_db_password'] or '' }}">
+                                <input type="password" placeholder="Password" class="form-control" name='dest_db_password' required value="{{ settings['dest_db_password'] or 'admin' }}">
                             </div>
                         </div>
                         <div class="form-group"><label class="col-lg-3 control-label" for='dest_db_port'>Port</label>
                             <div class="col-lg-9">
-                                <input type="text" placeholder="Port" class="form-control" name='dest_db_port' required value="{{ settings['dest_db_port'] or '' }}">
+                                <input type="text" placeholder="Port" class="form-control" name='dest_db_port' required value="{{ settings['dest_db_port'] or '3306' }}">
                             </div>
                         </div>
                         <div class="form-group">
