@@ -5,7 +5,6 @@ env
 adgg_tz/app_config.json
 data
 docker-compose.yml
-static/plugins
 adgg_tz/app_config.json
 vendor
 static/bower
