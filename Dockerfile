@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt-get install -y \
     mysql-client \
     libmysqlclient-dev
-#     git \
+    git
 #     python \
 #     python-dev \
 #     python-setuptools \
@@ -35,6 +35,7 @@ COPY . /opt/azizi_amp/
 # CMD ["uwsgi", "--ini", "/opt/azizi-amp/default_uwsgi.ini"]
 
 WORKDIR /opt/azizi_amp
+RUN git clone --depth=1 https://github.com/badili/odk_parser /opt/azizi_amp/vendor
 
 # Manually start the server for now
 # CMD python manage.py runserver
