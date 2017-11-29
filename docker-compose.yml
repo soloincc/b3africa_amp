@@ -14,7 +14,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=admin
       - MYSQL_DATABASE=b3africa
-      - MYSQL_USER=root
+      - MYSQL_USER=b3africa
       - MYSQL_PASSWORD=admin
     depends_on:
       - azizi-amp-data
@@ -32,7 +32,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=admin
       - MYSQL_DATABASE=b3africa
-      - MYSQL_USER=root
+      - MYSQL_USER=b3africa
       - MYSQL_PASSWORD=admin
       - MYSQL_HOST=azizi-amp-db
       - MYSQL_PORT=3306
