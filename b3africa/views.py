@@ -89,7 +89,7 @@ def download_page(request):
         'page_title': "%s | Downloads" % settings.SITE_NAME,
         'csrf_token': csrf_token,
         'section_title': 'Download Section',
-        'site_name': 'Site Name from Database',
+        'site_name': settings.SITE_NAME,
         'all_forms': json.dumps(all_forms)
     }
     return render(request, 'download.html', page_settings)
@@ -125,6 +125,7 @@ def manage_views(request):
         'page_title': "%s | Manage Generated Views" % settings.SITE_NAME,
         'csrf_token': csrf_token,
         'section_title': 'Manage Views',
+        'site_name': settings.SITE_NAME,
         'all_data': json.dumps(all_data)
     }
     return render(request, 'manage_views.html', page_settings)
@@ -149,6 +150,7 @@ def show_landing(request):
     page_settings = {
         'page_title': "%s | Home" % settings.SITE_NAME,
         'csrf_token': csrf_token,
+        'site_name': settings.SITE_NAME,
         'section_title': ''
     }
     return render(request, 'azizi_amp.html', page_settings)
@@ -327,6 +329,7 @@ def manage_mappings(request):
         'db_tables': json.dumps(db_tables),
         'tables_columns': json.dumps(tables_columns),
         'all_forms': json.dumps(all_forms),
+        'site_name': settings.SITE_NAME,
         'mappings': json.dumps(mappings)
     }
     return render(request, 'manage_mappings.html', page_settings)
@@ -410,6 +413,7 @@ def processing_errors(request):
     page_settings = {
         'page_title': "%s | Processing Errors" % settings.SITE_NAME,
         'csrf_token': csrf_token,
+        'site_name': settings.SITE_NAME,
         'section_title': 'Processing Errors'
     }
     return render(request, 'processing_errors.html', page_settings)
@@ -449,6 +453,7 @@ def map_visualization(request):
         'csrf_token': csrf_token,
         'map_title': 'Map Based Visualization',
         'section_title': 'Map Based Visualization',
+        'site_name': settings.SITE_NAME,
         'map_settings': json.dumps(map_settings)
     }
     return render(request, 'map_visualizations.html', page_settings)
@@ -492,6 +497,7 @@ def processing_status(request):
     page_settings = {
         'page_title': "%s | Processing Status" % settings.SITE_NAME,
         'csrf_token': csrf_token,
+        'site_name': settings.SITE_NAME,
         'section_title': 'Processing Status'
     }
     return render(request, 'processing_status.html', page_settings)
@@ -525,6 +531,7 @@ def system_settings(request):
         'page_title': "%s | Home" % settings.SITE_NAME,
         'csrf_token': csrf_token,
         'settings': all_settings,
+        'site_name': settings.SITE_NAME,
         'section_title': 'Manage %s Settings' % settings.SITE_NAME
     }
     return render(request, 'system_settings.html', page_settings)
@@ -543,6 +550,7 @@ def forms_settings(request):
         'page_title': "%s | Home" % settings.SITE_NAME,
         'csrf_token': csrf_token,
         'forms': json.dumps(all_forms),
+        'site_name': settings.SITE_NAME,
         'section_title': 'Manage %s Forms' % settings.SITE_NAME
     }
     return render(request, 'forms_settings.html', page_settings)
