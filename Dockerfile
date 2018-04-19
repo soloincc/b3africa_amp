@@ -36,6 +36,9 @@ WORKDIR /opt/azizi_amp
 RUN bower install --allow-root
 RUN git clone --depth=1 https://github.com/badili/odk_parser.git vendor
 
+# clone the odk_dashboard repo
+RUN git clone --depth=1 https://github.com/badili/odk_dashboard.git odk_dashboard
+
 ADD scripts /opt/scripts
 WORKDIR /opt/scripts
 
