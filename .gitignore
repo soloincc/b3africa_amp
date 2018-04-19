@@ -6,5 +6,6 @@ adgg_tz/app_config.json
 data
 docker-compose.yml
 adgg_tz/app_config.json
-vendor
+vendor*
+odk_dashboard
 static/bower
