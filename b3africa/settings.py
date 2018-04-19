@@ -227,6 +227,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'me@gmail.com'
 EMAIL_HOST_PASSWORD = 'password'
 
-ABSOLUTE_ROOT = 'http://localhost:8011/'
-SENTRY_LOCALHOST = 'http://a0dadd9f4bd54347b14d969b3f7fbdc1:e937cf83cee44449bf4bc5dfc64e70e6@localhost:9000/3'
-SENTRY_PRODUCTION = 'http://412f07efec7d461cbcdaf686c3b01e51:c684fccd436e46169c71f8c841ed3b00@sentry.badili.co.ke/3'
+# ABSOLUTE_ROOT = 'http://localhost:8011/'
+SENTRY_LOCALHOST = 'http://f3e557d52eb64a5b99261215511faf13:7a222c611b274b939903ba84899e79c5@sentry.badili.co.ke/3'
+SENTRY_PRODUCTION = 'http://f3e557d52eb64a5b99261215511faf13:7a222c611b274b939903ba84899e79c5@sentry.badili.co.ke/3'
