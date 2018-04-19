@@ -1,17 +1,17 @@
 {
-  "name": "marsabit_sdss",
+  "name": "azizi_amp",
   "version": "1.0",
   "authors": [
     "Wangoru Kihara <wangoru.kihara@badili.co.ke>"
   ],
-  "description": "African Dairy Genetics Gain Project - Dashboard v2",
+  "description": "Azizi Anarchy Management Platform - AMP",
   "main": "ran.py",
   "keywords": [
-    "ADGG",
-    "Dashboard"
+    "Azizi",
+    "AMP"
   ],
   "license": "GPLv3",
-  "homepage": "https://badili.co.ke/",
+  "homepage": "http://azizi.ilri.org",
   "ignore": [
     "**/.*",
     "node_modules",

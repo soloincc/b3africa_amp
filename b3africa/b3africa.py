@@ -1,6 +1,10 @@
 import os
 import sys
 import logging
+import requests
+from requests.auth import HTTPBasicAuth
+import json
+
 
 from collections import defaultdict
 
@@ -12,7 +16,7 @@ from raven import Client
 from terminal_output import Terminal
 from excel_writer import ExcelWriter
 from vendor.models import ODKForm, RawSubmissions, FormViews, ViewsData, ViewTablesLookup, DictionaryItems, FormMappings, ProcessingErrors, ODKFormGroup
-from sql import Query
+from .sql import Query
 
 from vendor.odk_parser import OdkParser
 
@@ -43,6 +47,13 @@ request = HttpRequest()
 
 class AziziAMP():
     def __init__(self):
+        self.top_level_url = "http://azzizi-baobab.baobab-demo.sanbi.ac.za/AzziziPlone"
+        self.username = "admin"
+        self.password = "admin"  # secret
+        self.project_uid = None
+        self.sample_types = None
+        self.response = None
+
         return
 
     def system_stats(self):
@@ -111,3 +122,78 @@ class AziziAMP():
             stats['animals']['count'] = animals[0]
 
         return stats
+
+
+    def push_samples_to_baobab(self, sample):
+        self.init_baobab_connection()
+        
+        # store_samples = StoreSamples()
+        self.set_project_uid()
+        self.set_sample_types()
+
+        create_samples_data = {
+            "portal_type": "Sample",
+            "SampleID": sample['s1q9_specimen_code'],
+            "title": sample['s1q9_specimen_code'],
+            "Project": sample['s1q3_project'],
+            "SampleType": sample['s1q4_sample_type'],
+            "Barcode": sample['s1q9_specimen_code'],
+            "StorageLocation": sample['s1q5_location'],
+            "Volume": sample['s1q10_vol'],
+            "Unit": "ml",
+            "APISource": "odk"
+        }
+        terminal.tprint('Sending to baobab', 'okblue')
+        terminal.tprint(json.dumps(create_samples_data), 'warn')
+
+        sample_response = self.create_sample(create_samples_data)
+        print('------------')
+
+        # print(json.dumps(sample_response))
+        print(sample_response.json())
+        print('------------')
+
+
+    def init_baobab_connection(self, project_id="project-1"):
+        auth = HTTPBasicAuth(self.username, self.password)
+        self.auth = auth
+
+        project_url = self.top_level_url + "/@@API/v2/Project?id=%s" % project_id
+        project_response = requests.get(project_url, auth=self.auth)
+
+        if project_response.status_code == 200:
+            self.project_data = project_response.json()
+        else:
+            raise('failed to retrieve project %s' % project_id)
+
+        sample_types_url = self.top_level_url + "/@@API/v2/SampleType"
+        sample_types_response = requests.get(sample_types_url, auth=self.auth)
+
+        if sample_types_response.status_code == 200:
+            self.sample_types_data = sample_types_response.json()
+        else:
+            raise 'failed to retrieve sample types'
+
+    def set_project_uid(self, project_id="project-1"):
+
+        for item in self.project_data['items']:
+            if item['id'] == project_id:
+                self.project_uid = item['uid']
+                break
+
+    def set_sample_types(self):
+
+        sample_types = {}
+        for item in self.sample_types_data['items']:
+            sample_types[item['title']] = item['uid']
+
+        self.sample_types = sample_types
+
+    def create_sample(self, data):
+
+        body = {"BODY": json.dumps(data)}
+
+        url = self.top_level_url  + '/@@API/v2/create/' + self.project_uid
+        response = requests.post(url, data=body, auth=self.auth)
+
+        return response
