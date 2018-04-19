@@ -53,7 +53,9 @@ INSTALLED_APPS = [
     'livereload',
     'raven.contrib.django.raven_compat',
 
+    'easy_thumbnails',
     'b3africa',
+    'odk_dashboard',
     'vendor',
 ]
 
@@ -73,7 +75,7 @@ ROOT_URLCONF = 'b3africa.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [os.path.join(BASE_DIR, 'templates/jinja2')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/jinja2'), os.path.join(BASE_DIR, 'odk_dashboard/templates/jinja2')],
         'APP_DIRS': True,
         'OPTIONS': {'environment': 'b3africa.jinja2_settings.environment',},
     },
@@ -109,6 +111,7 @@ if 'MYSQL_DATABASE' in os.environ:
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': os.environ['MYSQL_DATABASE'],
+            'DRIVER': 'mysql',
             'USER': os.environ['MYSQL_USER'],
             'PASSWORD': os.environ['MYSQL_PASSWORD'],
             'HOST': os.environ['MYSQL_HOST'],
@@ -123,11 +126,25 @@ else:
                 'ENGINE': 'django.db.backends.mysql',
                 'NAME': configs['default']['db'],
                 'USER': configs['default']['user'],
+                'DRIVER': 'mysql',
                 'PASSWORD': configs['default']['passwd'],
                 'HOST': configs['default']['host'],
-                'PORT': configs['default']['port']
+                'PORT': configs['default']['port'],
+                'OPTIONS': {
+                    'sql_mode': 'TRADITIONAL',
+                    'charset': 'utf8',
+                    'init_command': 'SET storage_engine=INNODB, character_set_connection=utf8, collation_connection=utf8_bin'
+                }
             }
         }
+        if DATABASES['default']['DRIVER'] == 'mysql':
+            DATABASES['default']['OPTIONS'] = {
+                'sql_mode': 'TRADITIONAL',
+                'charset': 'utf8',
+                'init_command': 'SET storage_engine=INNODB, character_set_connection=utf8, collation_connection=utf8_bin'
+                # 'init_command': 'SET storage_engine=INNODB, character_set_connection=utf8, collation_connection=utf8_bin, SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
+            }  # Now we have a mild degree of confidence :-)
+
 
 CRONJOBS = [
     # ('*/5 * * * *', 'marsabit.odk_forms.auto_process_submissions', '>> /tmp/marsabit_cron.log')
@@ -181,7 +198,10 @@ LOCALES = {
 LOOKUP_TABLE = 'dictionary_items'
 
 # The number of records to use for the dry run
+IS_DRY_RUN = False
 DRY_RUN_RECORDS = 30
+
+TEMPDIR = 'temp'
 
 ERR_CODES = {
     'duplicate': {'CODE': 10001, 'TAG': 'DUPLICATE'},
@@ -193,3 +213,20 @@ ERR_CODES = {
 JOINER = ' - '
 
 GPS_REGEX = '-?\d{1,3}\.\d+\s-?\d{1,3}\.\d+\s\d{1,5}\.\d+\s\d{1,4}\.\d{1,2}'
+
+# ##################  MEDIA ##################
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+PROFILE_PHOTO_DIR = ('uploads/profiles')  # If you change this
+#                           Remember to update the model Profile
+
+# ################# EMAIL SETTINGS ###########
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'me@gmail.com'
+EMAIL_HOST_PASSWORD = 'password'
+
+ABSOLUTE_ROOT = 'http://localhost:8011/'
+SENTRY_LOCALHOST = 'http://a0dadd9f4bd54347b14d969b3f7fbdc1:e937cf83cee44449bf4bc5dfc64e70e6@localhost:9000/3'
+SENTRY_PRODUCTION = 'http://412f07efec7d461cbcdaf686c3b01e51:c684fccd436e46169c71f8c841ed3b00@sentry.badili.co.ke/3'

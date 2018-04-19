@@ -1,24 +1,23 @@
 from __future__ import absolute_import  # Python 2 only
 
-import json
-import logging
-import traceback
-import gzip
 import posixpath
+import json
+import re
 
-from urlparse import unquote
-from cStringIO import StringIO as IO
+try:
+    from urllib.parse import unquote
+except ImportError:
+    from urlparse import unquote
 
+from django.http import Http404
 from django.conf import settings
 from django.contrib.staticfiles import finders
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views import static
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
+# from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 from django.middleware import csrf
-
-from wsgiref.util import FileWrapper
 
 from vendor.odk_parser import OdkParser
 from .b3africa import AziziAMP
@@ -26,261 +25,6 @@ from vendor.terminal_output import Terminal
 
 import os
 terminal = Terminal()
-
-page_settings = {'site_name': settings.SITE_NAME}
-
-
-def login_page(request):
-    csrf_token = get_or_create_csrf_token(request)
-    page_settings = {'page_title': "%s | Login Page" % settings.SITE_NAME, 'csrf_token': csrf_token}
-    terminal.tprint(json.dumps(request.POST), 'ok')
-
-    try:
-        username = request.POST['username']
-        password = request.POST['pass']
-
-        if username is not None:
-            user = authenticate(username=username, password=password)
-
-            if user is None:
-                terminal.tprint("Couldn't authenticate the user... redirect to login page", 'fail')
-                page_settings['error'] = 'Invalid username or password'
-                return render(request, 'login.html', page_settings)
-            else:
-                terminal.tprint('All ok', 'debug')
-                login(request, user)
-                return redirect('/dashboard', request=request)
-        else:
-            return render(request, 'login.html')
-    except KeyError as e:
-        # ask the user to enter the username and/or password
-        terminal.tprint('Username/password not defined: %s' % str(e), 'warn')
-        page_settings['message'] = "Please enter your username and password"
-        return render(request, 'login.html', page_settings)
-    except Exception as e:
-        terminal.tprint(str(e), 'fail')
-        page_settings['error'] = "There was an error while authenticating.<br />Please try again and if the error persist, please contact the system administrator"
-        return render(request, 'login.html', page_settings)
-
-
-def logout_view(request):
-    logout(request)
-    return show_landing(request)
-
-
-def under_review_page(request):
-    return render(request, 'under_review.html', page_settings)
-
-
-@login_required(login_url='/login')
-def download_page(request):
-    csrf_token = get_or_create_csrf_token(request)
-
-    parser = OdkParser()
-    is_first_login = parser.is_first_login()
-    are_ona_settings_saved = parser.are_ona_settings_saved()
-    if is_first_login is True or are_ona_settings_saved is False:
-        return system_settings(request)
-
-    # get all the data to be used to construct the tree
-    odk = OdkParser()
-    all_forms = odk.get_all_forms()
-    page_settings = {
-        'page_title': "%s | Downloads" % settings.SITE_NAME,
-        'csrf_token': csrf_token,
-        'section_title': 'Download Section',
-        'site_name': 'Site Name from Database',
-        'all_forms': json.dumps(all_forms)
-    }
-    return render(request, 'download.html', page_settings)
-
-
-@login_required(login_url='/login')
-def modify_view(request):
-
-    odk = OdkParser()
-    if (request.get_full_path() == '/edit_view/'):
-        response = odk.edit_view(request)
-    elif (request.get_full_path() == '/delete_view/'):
-        response = odk.delete_view(request)
-
-    return HttpResponse(json.dumps(response))
-
-
-@login_required(login_url='/login')
-def manage_views(request):
-    csrf_token = get_or_create_csrf_token(request)
-
-    parser = OdkParser()
-    is_first_login = parser.is_first_login()
-    are_ona_settings_saved = parser.are_ona_settings_saved()
-    if is_first_login is True or are_ona_settings_saved is False:
-        return system_settings(request)
-
-    # get all the data to be used to construct the tree
-    odk = OdkParser()
-    all_data = odk.get_views_info()
-
-    page_settings = {
-        'page_title': "%s | Manage Generated Views" % settings.SITE_NAME,
-        'csrf_token': csrf_token,
-        'section_title': 'Manage Views',
-        'all_data': json.dumps(all_data)
-    }
-    return render(request, 'manage_views.html', page_settings)
-
-
-@login_required(login_url='/login')
-def update_db(request):
-    get_or_create_csrf_token(request)
-    odk = OdkParser()
-
-    try:
-        odk.update_sdss_db()
-    except Exception:
-        logging.error(traceback.format_exc())
-        return HttpResponse(traceback.format_exc())
-
-    return HttpResponse(json.dumps({'error': False, 'message': 'Database updated'}))
-
-
-def show_landing(request):
-    csrf_token = get_or_create_csrf_token(request)
-    page_settings = {
-        'page_title': "%s | Home" % settings.SITE_NAME,
-        'csrf_token': csrf_token,
-        'section_title': ''
-    }
-    return render(request, 'azizi_amp.html', page_settings)
-
-
-@login_required(login_url='/login')
-def show_dashboard(request):
-    csrf_token = get_or_create_csrf_token(request)
-
-    # check if the settings have been defined(first time visit), if not redirect to the settings page
-    azizi_amp = AziziAMP()
-    try:
-        parser = OdkParser()
-        is_first_login = parser.is_first_login()
-        are_ona_settings_saved = parser.are_ona_settings_saved()
-        if is_first_login is True or are_ona_settings_saved is False:
-            return system_settings(request)
-
-        stats = azizi_amp.system_stats()
-        page_settings = {
-            'page_title': "%s | Home" % settings.SITE_NAME,
-            'csrf_token': csrf_token,
-            'section_title': 'Overview',
-            'data': stats,
-            'site_name': settings.SITE_NAME,
-            'js_data': json.dumps(stats)
-        }
-        # return render(request, 'dash_home.html', page_settings)
-        return system_settings(request)
-    except Exception as e:
-        print str(e)
-        terminal.tprint('Error! %s' % str(e), 'fail')
-        show_landing(request)
-
-
-# @login_required(login_url='/login')
-def form_structure(request):
-    # given a form id, get the structure for the form
-    odk = OdkParser()
-    try:
-        form_id = int(request.POST['form_id'])
-        structure = odk.get_form_structure_as_json(form_id)
-    except KeyError as e:
-        logging.error(traceback.format_exc())
-        return HttpResponse(json.dumps({'error': True, 'message': str(e)}))
-    except Exception as e:
-        logging.info(str(e))
-        logging.debug(traceback.format_exc())
-        return HttpResponse(json.dumps({'error': True, 'message': str(e)}))
-
-    return HttpResponse(json.dumps({'error': False, 'structure': structure}))
-
-
-# @login_required(login_url='/login')
-def download_data(request):
-    # given the nodes, download the associated data
-    odk = OdkParser()
-    try:
-        data = json.loads(request.body)
-        res = odk.fetch_merge_data(data['form_id'], data['nodes[]'], data['format'], data['action'], data['view_name'])
-    except KeyError as e:
-        response = HttpResponse(json.dumps({'error': True, 'message': str(e)}), content_type='text/json')
-        response['Content-Message'] = json.dumps({'error': True, 'message': str(e)})
-        return response
-    except Exception as e:
-        logging.debug(traceback.format_exc())
-        logging.error(str(e))
-        response = HttpResponse(json.dumps({'error': True, 'message': str(e)}), content_type='text/json')
-        response['Content-Message'] = json.dumps({'error': True, 'message': str(e)})
-        return response
-
-    if res['is_downloadable'] is True:
-        filename = res['filename']
-        wrapper = FileWrapper(file(filename))
-        response = HttpResponse(wrapper, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=%s' % os.path.basename(filename)
-        response['Content-Length'] = os.path.getsize(filename)
-    else:
-        response = HttpResponse(json.dumps({'error': False, 'message': res['message']}), content_type='text/json')
-        response['Content-Message'] = json.dumps({'error': False, 'message': res['message']})
-
-    os.remove(filename)
-    return response
-
-
-# @login_required(login_url='/login')
-def download(request):
-    # given the nodes, download the associated data
-    try:
-        odk = OdkParser()
-        parser = OdkParser()
-        is_first_login = parser.is_first_login()
-        if is_first_login is True:
-            return system_settings(request)
-        data = json.loads(request.body)
-        filename = odk.fetch_data(data['form_id'], data['nodes[]'], data['format'])
-    except KeyError:
-        return HttpResponse(traceback.format_exc())
-    except Exception as e:
-        print str(e)
-        logging.error(traceback.format_exc())
-
-    wrapper = FileWrapper(file(filename))
-    response = HttpResponse(wrapper, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=%s' % os.path.basename(filename)
-    response['Content-Length'] = os.path.getsize(filename)
-
-    return response
-
-
-# @login_required(login_url='/login')
-def refresh_forms(request):
-    """
-    Refresh the database with any new forms
-    """
-    odk = OdkParser()
-
-    try:
-        all_forms = odk.refresh_forms()
-    except Exception:
-        logging.error(traceback.format_exc())
-
-    return HttpResponse(json.dumps({'error': False, 'all_forms': all_forms}))
-
-
-def get_or_create_csrf_token(request):
-    token = request.META.get('CSRF_COOKIE', None)
-    if token is None:
-        token = csrf._get_new_csrf_string()
-        request.META['CSRF_COOKIE'] = token
-    request.META['CSRF_COOKIE_USED'] = True
-    return token
 
 
 def serve_static_files(request, path, insecure=False, **kwargs):
@@ -306,292 +50,97 @@ def serve_static_files(request, path, insecure=False, **kwargs):
     return static.serve(request, path, document_root=document_root, **kwargs)
 
 
-def manage_mappings(request):
+def show_landing(request):
     csrf_token = get_or_create_csrf_token(request)
-
-    parser = OdkParser()
-    is_first_login = parser.is_first_login()
-    are_ona_settings_saved = parser.are_ona_settings_saved()
-    if is_first_login is True or are_ona_settings_saved is False:
-        return system_settings(request)
-
-    odk = OdkParser()
-    all_forms = odk.get_all_forms()
-    (db_tables, tables_columns) = odk.get_db_tables()
-    mappings = odk.mapping_info()
-
     page_settings = {
         'page_title': "%s | Home" % settings.SITE_NAME,
         'csrf_token': csrf_token,
-        'section_title': 'Manage ODK and Database Mappings',
-        'db_tables': json.dumps(db_tables),
-        'tables_columns': json.dumps(tables_columns),
-        'all_forms': json.dumps(all_forms),
-        'mappings': json.dumps(mappings)
+        'section_title': ''
     }
-    return render(request, 'manage_mappings.html', page_settings)
+    return render(request, 'azizi_amp.html', page_settings)
 
 
-def edit_mapping(request):
-    odk = OdkParser()
-    if (request.get_full_path() == '/edit_mapping/'):
-        response = odk.edit_mapping(request)
-
-    return HttpResponse(json.dumps(response))
+def logout_view(request):
+    logout(request)
+    return show_landing(request)
 
 
-def create_mapping(request):
-    odk = OdkParser()
-    mappings = odk.save_mapping(request)
-    return return_json(mappings)
 
-
-def delete_mapping(request):
-    odk = OdkParser()
-    mappings = odk.delete_mapping(request)
-    return return_json(mappings)
-
-
-def clear_mappings(request):
-    odk = OdkParser()
-    mappings = odk.clear_mappings()
-    return return_json(mappings)
-
-
-def return_json(mappings):
-    to_return = json.dumps(mappings)
-    response = HttpResponse(to_return, content_type='text/json')
-    response['Content-Message'] = to_return
-    return response
-
-
-def return_polygons(mappings):
-    to_return = json.dumps(mappings)
-    response = HttpResponse(to_return)
-    response['Content-Type'] = 'application/json'
-    response['Content-Message'] = to_return
-    return response
-
-
-def validate_mappings(request):
-    odk = OdkParser()
-    (is_fully_mapped, is_mapping_valid, comments) = odk.validate_mappings()
-
-    to_return = {'error': False, 'is_fully_mapped': is_fully_mapped, 'is_mapping_valid': is_mapping_valid, 'comments': comments}
-    return return_json(to_return)
-
-
-def manual_data_process(request):
-    odk = OdkParser()
-    is_dry_run = json.loads(request.POST['is_dry_run'])
-    (is_success, comments) = odk.manual_process_data(is_dry_run)
-
-    to_return = {'error': is_success, 'comments': comments}
-    return return_json(to_return)
-
-
-def delete_processed_data(request):
-    odk = OdkParser()
-    (is_success, comments) = odk.delete_processed_data()
-
-    to_return = {'error': is_success, 'comments': comments}
-    return return_json(to_return)
-
-
-def processing_errors(request):
+@login_required(login_url='/login')
+def show_dashboard(request):
     csrf_token = get_or_create_csrf_token(request)
 
-    parser = OdkParser()
-    is_first_login = parser.is_first_login()
-    are_ona_settings_saved = parser.are_ona_settings_saved()
-    if is_first_login is True or are_ona_settings_saved is False:
-        return system_settings(request)
+    azizi_amp = AziziAMP()
+    try:
+        stats = azizi_amp.system_stats()
+        page_settings = {
+            'page_title': "%s | Home" % settings.SITE_NAME,
+            'csrf_token': csrf_token,
+            'section_title': 'Overview',
+            'data': stats,
+            'site_name': settings.SITE_NAME,
+            'js_data': json.dumps(stats)
+        }
+        return render(request, 'dash_home.html', page_settings)
+    except Exception as e:
+        terminal.tprint('Error! %s' % str(e), 'fail')
+        show_landing(request)
 
-    page_settings = {
-        'page_title': "%s | Processing Errors" % settings.SITE_NAME,
-        'csrf_token': csrf_token,
-        'section_title': 'Processing Errors'
-    }
-    return render(request, 'processing_errors.html', page_settings)
+# @login_required(login_url='/login')
+# def show_dashboard(request):
+#     csrf_token = get_or_create_csrf_token(request)
+
+#     # check if the settings have been defined(first time visit), if not redirect to the settings page
+#     azizi_amp = AziziAMP()
+#     try:
+#         parser = OdkParser()
+#         is_first_login = parser.is_first_login()
+#         are_ona_settings_saved = parser.are_ona_settings_saved()
+#         if is_first_login is True or are_ona_settings_saved is False:
+#             return system_settings(request)
+
+#         stats = azizi_amp.system_stats()
+#         page_settings = {
+#             'page_title': "%s | Home" % settings.SITE_NAME,
+#             'csrf_token': csrf_token,
+#             'section_title': 'Overview',
+#             'data': stats,
+#             'site_name': settings.SITE_NAME,
+#             'js_data': json.dumps(stats)
+#         }
+#         # return render(request, 'dash_home.html', page_settings)
+#         return system_settings(request)
+#     except Exception as e:
+#         print(str(e))
+#         terminal.tprint('Error! %s' % str(e), 'fail')
+#         show_landing(request)
 
 
-def fetch_processing_errors(request):
-    cur_page = json.loads(request.GET['page'])
-    per_page = json.loads(request.GET['perPage'])
-    offset = json.loads(request.GET['offset'])
-    sorts = json.loads(request.GET['sorts']) if 'sorts' in request.GET else None
-    queries = json.loads(request.GET['queries']) if 'queries' in request.GET else None
-
-    odk = OdkParser()
-    (is_success, proc_errors) = odk.processing_errors(cur_page, per_page, offset, sorts, queries)
-    to_return = json.dumps(proc_errors)
-
-    response = HttpResponse(to_return, content_type='text/json')
-    response['Content-Message'] = to_return
-    return response
-
-
-def fetch_single_error(request):
-    err_id = json.loads(request.POST['err_id'])
-    odk = OdkParser()
-    (is_success, cur_error, r_sub) = odk.fetch_single_error(err_id)
-
-    to_return = {'error': is_success, 'err_json': cur_error, 'raw_submission': r_sub}
-    return return_json(to_return)
-
-
-def map_visualization(request):
+def save2baobab(request):
     csrf_token = get_or_create_csrf_token(request)
-    odk = OdkParser()
-    map_settings = odk.fetch_base_map_settings()
-    page_settings = {
-        'page_title': "%s | Map Based Visualizations" % settings.SITE_NAME,
-        'csrf_token': csrf_token,
-        'map_title': 'Map Based Visualization',
-        'section_title': 'Map Based Visualization',
-        'map_settings': json.dumps(map_settings)
-    }
-    return render(request, 'map_visualizations.html', page_settings)
-
-
-def first_level_geojson(request):
-    odk = OdkParser()
-    c_code = json.loads(request.GET['c_code'])
-    cur_polygons = odk.first_level_geojson(int(c_code))
-
-    return HttpResponse(json.dumps(cur_polygons), content_type='application/json')
-
-
-def save_json_edits(request):
-    err_id = json.loads(request.POST['err_id'])
-    odk = OdkParser()
-    (is_error, cur_error) = odk.save_json_edits(err_id, json.loads(request.POST['json_data']))
-
-    to_return = {'error': is_error, 'message': cur_error}
-    return return_json(to_return)
-
-
-def process_single_submission(request):
-    err_id = json.loads(request.POST['err_id'])
-    odk = OdkParser()
-    (is_error, cur_error) = odk.process_single_submission(err_id)
-
-    to_return = {'error': is_error, 'message': cur_error}
-    return return_json(to_return)
-
-
-def processing_status(request):
-    csrf_token = get_or_create_csrf_token(request)
-
     parser = OdkParser()
-    is_first_login = parser.is_first_login()
-    are_ona_settings_saved = parser.are_ona_settings_saved()
-    if is_first_login is True or are_ona_settings_saved is False:
-        return system_settings(request)
+    azizi_amp = AziziAMP()
 
-    page_settings = {
-        'page_title': "%s | Processing Status" % settings.SITE_NAME,
-        'csrf_token': csrf_token,
-        'section_title': 'Processing Status'
-    }
-    return render(request, 'processing_status.html', page_settings)
+    terminal.tprint(json.dumps(request.body), 'fail')
+    form_id = int(json.loads(request.POST['form_id']))
 
+    all_submissions = parser.get_all_submissions(form_id)
+    for sample in all_submissions:
+        m = re.findall(r"^'(.+)'$", sample['raw_data'])
+        sample_d = json.loads(m[0])
 
-def fetch_processing_status(request):
-    cur_page = json.loads(request.GET['page'])
-    per_page = json.loads(request.GET['perPage'])
-    offset = json.loads(request.GET['offset'])
-    sorts = json.loads(request.GET['sorts']) if 'sorts' in request.GET else None
-    queries = json.loads(request.GET['queries']) if 'queries' in request.GET else None
+        try:
+            azizi_amp.push_samples_to_baobab(sample_d)
+        except Exception as e:
+            terminal.tprint(str(e), 'fail')
+            return HttpResponse(json.dumps({'error': True, 'message': str(e)}))
 
-    odk = OdkParser()
-    (is_success, proc_errors) = odk.fetch_processing_status(cur_page, per_page, offset, sorts, queries)
-    to_return = json.dumps(proc_errors)
+    return HttpResponse(json.dumps({'error': False, 'message': 'Saved Successfully'}))
 
-    response = HttpResponse(to_return, content_type='text/json')
-    response['Content-Message'] = to_return
-    return response
-
-
-def system_settings(request):
-    csrf_token = get_or_create_csrf_token(request)
-
-    parser = OdkParser()
-    all_settings = parser.get_all_settings()
-    print 'settings'
-    print all_settings
-
-    page_settings = {
-        'page_title': "%s | Home" % settings.SITE_NAME,
-        'csrf_token': csrf_token,
-        'settings': all_settings,
-        'section_title': 'Manage %s Settings' % settings.SITE_NAME
-    }
-    return render(request, 'system_settings.html', page_settings)
-
-
-def forms_settings(request):
-    csrf_token = get_or_create_csrf_token(request)
-
-    parser = OdkParser()
-    is_first_login = parser.is_first_login()
-    if is_first_login is True:
-        return system_settings(request)
-
-    all_forms = parser.get_odk_forms_list()
-    page_settings = {
-        'page_title': "%s | Home" % settings.SITE_NAME,
-        'csrf_token': csrf_token,
-        'forms': json.dumps(all_forms),
-        'section_title': 'Manage %s Forms' % settings.SITE_NAME
-    }
-    return render(request, 'forms_settings.html', page_settings)
-
-
-def save_form_settings(request):
-    parser = OdkParser()
-    if (request.get_full_path() == '/save_form_settings/'):
-        response = parser.save_form_settings(request)
-
-    return HttpResponse(json.dumps(response))
-
-
-def forms_settings_info(request):
-    cur_page = json.loads(request.GET['page'])
-    per_page = json.loads(request.GET['perPage'])
-    offset = json.loads(request.GET['offset'])
-    sorts = json.loads(request.GET['sorts']) if 'sorts' in request.GET else None
-    queries = json.loads(request.GET['queries']) if 'queries' in request.GET else None
-
-    odk = OdkParser()
-    (is_success, proc_errors) = odk.get_odk_forms_info(cur_page, per_page, offset, sorts, queries)
-    to_return = json.dumps(proc_errors)
-
-    response = HttpResponse(to_return, content_type='text/json')
-    response['Content-Message'] = to_return
-    return response
-
-
-def save_settings(request):
-    # saves the settings as pased from the front end
-    csrf_token = get_or_create_csrf_token(request)
-
-    parser = OdkParser()
-    result = parser.save_settings(request)
-
-    return return_json(result)
-
-def zip_response(json_data):
-    gzip_buffer = IO()
-    gzip_file = gzip.GzipFile(mode='wb', fileobj=gzip_buffer)
-    gzip_file.write(json_data)
-    gzip_file.close()
-
-    response = HttpResponse(content_type='application/json')
-
-    response.data = gzip_buffer.getvalue()
-    response.headers['Content-Encoding'] = 'gzip'
-    response.headers['Vary'] = 'Accept-Encoding'
-    response.headers['Content-Length'] = len(response.data)
-
-    return response
+def get_or_create_csrf_token(request):
+    token = request.META.get('CSRF_COOKIE', None)
+    if token is None:
+        token = csrf._get_new_csrf_string()
+        request.META['CSRF_COOKIE'] = token
+    request.META['CSRF_COOKIE_USED'] = True
+    return token
