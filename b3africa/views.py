@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 from django.views import static
 from django.http import HttpResponse
 # from django.http.response import HttpResponse
+from django.contrib.auth import logout
 from django.shortcuts import render, redirect
 from django.middleware import csrf
 
@@ -60,10 +61,9 @@ def show_landing(request):
     return render(request, 'azizi_amp.html', page_settings)
 
 
-def logout_view(request):
+def logout_page(request):
     logout(request)
     return show_landing(request)
-
 
 
 @login_required(login_url='/login')

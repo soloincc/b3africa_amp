@@ -3,6 +3,7 @@
 
 <div>
     <link rel="stylesheet" href="{{ static('bower/jqwidgets/jqwidgets/styles/jqx.base.css') }}" />
+    <link rel="stylesheet" href="{{ static('bower/dynatable/jquery.dynatable.css') }}" />
     <link rel="stylesheet" href="{{ static('css/azizi_amp.css') }}" />
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -17,64 +18,23 @@
     </div>
 
     <div class='row'>
-        <div class='col-lg-4'>
-            <div class='ibox float-e-margins'>
-                <div class='ibox-title'>Farmers</div>
-                <div class='ibox-content'>
-                    <div class='row'>
-                        <div class='col-lg-5'>
-                            <div class="widget lazur-bg p-lg text-center">
-                                <div class="m-b-md">
-                                    <i class="fa fa-user fa-3x"></i>
-                                    <h1 class="m-xs">10</h1>
-                                    <h3 class="font-bold no-margins">
-                                        Registered Farmers
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-lg-7'>
-                            <div id="farmers_gender_dist"></div>
-                        </div>
-                    </div>
+        <div class='col-lg-12' id='error_table'>
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Defined Forms</h5>
                 </div>
-            </div>
-        </div>
-        <div class='col-lg-4'>
-            <div class='ibox float-e-margins'>
-                <div class='ibox-title'>Animals</div>
-                <div class='ibox-content'>
-                    <div class='row'>
-                        <div class='col-lg-5'>
-                            <div class="widget navy-bg p-lg text-center">
-                                <div class="m-b-md">
-                                    <i class="fa fa-paw fa-3x"></i>
-                                    <h1 class="m-xs">20</h1>
-                                    <h3 class="font-bold no-margins">
-                                        Registered Animals
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-lg-7'>
-                            <div id="animals_dist"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class='col-lg-4'>
-            <div class='ibox float-e-margins'>
-                <div class='ibox-title'>Error Logs</div>
-                <div class='ibox-content'>
-                    <div class='row'>
-                        <div class='col-lg-6'>
-                            <div id="farmer_reg_processing"></div>
-                        </div>
-                        <div class='col-lg-6'>
-                            <div id="animal_reg_processing"></div>
-                        </div>
-                    </div>
+                <div class="ibox-content">
+                    <table id='processing_status' class='table'>
+                      <thead>
+                        <th data-dynatable-column="form_name">Form Name</th>
+                        <th data-dynatable-column="form_group">Form Group</th>
+                        <th data-dynatable-column="date_created">Date Added</th>
+                        <th data-dynatable-column="last_submission_date">Last Submission</th>
+                        <th data-dynatable-column="no_submissions"># Submissions</th>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -85,16 +45,14 @@
     <script type="text/javascript" src="{{ static('unify-assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
 
     <!-- Highcharts plugins-->
-    <script type="text/javascript" src="{{ static('bower/highcharts/highcharts.js') }}"></script>
+    <script type="text/javascript" src="{{ static('bower/dynatable/jquery.dynatable.js') }}"></script>
 
     <script type='text/javascript' src="{{ static('js/azizi_amp.js') }}"></script>
 
     <script>
         $(document).ready(function(){
             BadiliDash.data = {};
-
-            dash.data = {{ js_data | safe}};
-            dash.initiate_adgg_dash();
+            dash.initiateProcessingStatus();
         });
     </script>
 </div>

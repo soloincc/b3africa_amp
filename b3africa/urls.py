@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^', include('odk_dashboard.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.show_landing, name='landing_page'),
+    url(r'^logout$', views.logout_page, name='logout_page'),
     url(r'^home$', views.show_dashboard, name='landing_page'),
     url(r'^dashboard$', views.show_dashboard, name='dashboard'),
     url(r'^accounts/', include('django.contrib.auth.urls')),

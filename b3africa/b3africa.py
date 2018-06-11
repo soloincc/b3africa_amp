@@ -123,7 +123,6 @@ class AziziAMP():
 
         return stats
 
-
     def push_samples_to_baobab(self, sample):
         self.init_baobab_connection()
         
@@ -152,7 +151,6 @@ class AziziAMP():
         # print(json.dumps(sample_response))
         print(sample_response.json())
         print('------------')
-
 
     def init_baobab_connection(self, project_id="project-1"):
         auth = HTTPBasicAuth(self.username, self.password)

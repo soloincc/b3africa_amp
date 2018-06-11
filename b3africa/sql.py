@@ -1,6 +1,6 @@
 from django.db import connections
 from terminal_output import Terminal
-from .settings import DATABASES
+from settings.base import DATABASES
 
 terminal = Terminal()
 

@@ -3,7 +3,7 @@ import os
 import sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "b3africa.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "b3africa.settings.development")
 
     # in order to include modules from the core parser, we need to add it as a path in our system
     parser_core_path = os.path.abspath(os.path.join(os.path.dirname(__file__), './vendor'))
