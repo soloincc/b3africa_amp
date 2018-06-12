@@ -27,7 +27,6 @@ from vendor.terminal_output import Terminal
 import os
 terminal = Terminal()
 
-
 def serve_static_files(request, path, insecure=False, **kwargs):
     """
     Serve static files below a given point in the directory structure or
@@ -38,7 +37,6 @@ def serve_static_files(request, path, insecure=False, **kwargs):
     in your URLconf.
     It uses the django.views.static.serve() view to serve the found files.
     """
-
     if not settings.DEBUG and not insecure:
         raise Http404
     normalized_path = posixpath.normpath(unquote(path)).lstrip('/')
@@ -56,6 +54,7 @@ def show_landing(request):
     page_settings = {
         'page_title': "%s | Home" % settings.SITE_NAME,
         'csrf_token': csrf_token,
+        'site_name': settings.SITE_NAME,
         'section_title': ''
     }
     return render(request, 'azizi_amp.html', page_settings)
