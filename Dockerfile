@@ -5,13 +5,15 @@ MAINTAINER Wangoru Kihara wangoru.kihara@badili.co.ke
 # Install build deps, then run `pip install`, then remove unneeded build deps all in a single step. Correct the path to your production requirements file, if needed.
 RUN apt-get update && \
     apt-get upgrade -y && \
+    curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get install -y \
     mysql-client \
     default-libmysqlclient-dev \
+    apt-utils \
     git \
     curl \
     wget \
-    npm
+    nodejs
 
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
