@@ -7,7 +7,7 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
     mysql-client \
-    libmysqlclient-dev \
+    default-libmysqlclient-dev \
     git \
     curl \
     wget \
