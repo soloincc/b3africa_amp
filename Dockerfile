@@ -7,15 +7,12 @@ RUN apt-get update && \
     apt-get upgrade -y && \
     curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get install -y \
-    mysql-client \
-    default-libmysqlclient-dev \
     apt-utils \
+    mysql-client \
     git \
     curl \
     wget \
     nodejs
-
-RUN ln -s /usr/bin/nodejs /usr/bin/node
 
 # install bower
 RUN npm install --global bower
