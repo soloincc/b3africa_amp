@@ -9,6 +9,10 @@ python /opt/azizi_amp/manage.py makemigrations vendor
 python /opt/azizi_amp/manage.py migrate
 python /opt/azizi_amp/manage.py migrate --run-syncdb
 
+echo "Get the github subdomains"
+git clone https://github.com/badili/odk_parser.git vendor
+git clone https://github.com/badili/odk_dashboard.git
+
 echo "Collect the static files"
 mkdir /opt/azizi_amp/static
 python /opt/azizi_amp/manage.py collectstatic
