@@ -43,5 +43,4 @@ WORKDIR /opt/scripts
 
 RUN chmod a+x *.sh
 
-
 ENTRYPOINT ["/opt/scripts/entrypoint.sh"]
