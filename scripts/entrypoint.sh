@@ -18,7 +18,7 @@ mkdir /opt/azizi_amp/static
 python /opt/azizi_amp/manage.py collectstatic
 
 echo "Create the django super user"
-echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'info@badili.co.ke', 'Innovate254')" | python /opt/azizi_amp/manage.py shell
+echo "from django.contrib.auth.models import User; User.objects.create_superuser('azizi_amp', 'info@badili.co.ke', 'azizi_amp')" | python /opt/azizi_amp/manage.py shell
 
 echo "Create a default mapped database and import the schema"
 mysql -u root -padmin -h azizi-amp-db -e "create database axgg"
