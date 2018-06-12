@@ -9,3 +9,4 @@ adgg_tz/app_config.json
 vendor*
 odk_dashboard
 static/bower
+b3africa/settings/development.py
