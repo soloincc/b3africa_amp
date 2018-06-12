@@ -3,7 +3,7 @@ import os
 import sys
 
 if __name__ == "__main__":
-    if 'development.py' in os.listdir('b3africa/settings'):
+    if os.path.exists("./b3africa/settings") and 'development.py' in os.listdir('./b3africa/settings'):
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "b3africa.settings.development")
     else:
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "b3africa.settings.production")
