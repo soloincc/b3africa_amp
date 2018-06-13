@@ -10,7 +10,7 @@ python /opt/azizi_amp/manage.py migrate
 python /opt/azizi_amp/manage.py migrate --run-syncdb
 
 echo "Collect the static files"
-python /opt/azizi_amp/manage.py collectstatic
+cat <(echo "yes") - | python /opt/azizi_amp/manage.py collectstatic
 
 echo "Create the django super user"
 echo "from django.contrib.auth.models import User; User.objects.create_superuser('azizi_amp', 'info@badili.co.ke', 'azizi_amp')" | python /opt/azizi_amp/manage.py shell
